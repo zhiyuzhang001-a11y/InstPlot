@@ -40,7 +40,7 @@ def test_release_workflow_checks_lock_and_cross_platform_footprint():
     )
 
 
-def test_full_pyside_measurement_restores_essentials_environment(tmp_path, monkeypatch):
+def test_full_pyside_measurement_uses_disposable_environment(tmp_path, monkeypatch):
     environment = tmp_path / ".venv"
     python = release._environment_python(environment)
     python.parent.mkdir(parents=True)
@@ -61,5 +61,5 @@ def test_full_pyside_measurement_restores_essentials_environment(tmp_path, monke
 
     assert result["essentials_bytes"] == 100
     assert result["full_bytes"] == 250
-    assert any("uninstall" in command for command in commands)
-    assert commands[-1][-2:] == ["pip", "check"]
+    assert all(command[0] != str(python) for command in commands)
+    assert not any("uninstall" in command for command in commands)

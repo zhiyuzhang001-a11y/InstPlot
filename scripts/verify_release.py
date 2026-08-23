@@ -114,32 +114,48 @@ def _environment_python(environment):
 
 def measure_full_pyside(environment):
     environment = Path(environment).resolve()
-    python = _environment_python(environment)
-    if not python.is_file():
-        raise RuntimeError(f"environment Python not found: {python}")
-    before = environment_size(environment)
-    version_result = subprocess.run(
-        [
-            str(python),
-            "-I",
-            "-c",
-            "import importlib.metadata as m; print(m.version('PySide6-Essentials'))",
-        ],
-        text=True,
-        capture_output=True,
-    )
-    if version_result.returncode != 0:
-        raise RuntimeError(version_result.stderr.strip() or "PySide6-Essentials is not installed")
-    version = version_result.stdout.strip()
-    install = subprocess.run(
-        [str(python), "-m", "pip", "install", "--disable-pip-version-check", f"PySide6=={version}"],
-        text=True,
-        capture_output=True,
-    )
-    if install.returncode != 0:
-        raise RuntimeError(install.stderr.strip() or install.stdout.strip() or "full PySide6 install failed")
-    try:
-        after = environment_size(environment)
+    source_python = _environment_python(environment)
+    if not source_python.is_file():
+        raise RuntimeError(f"environment Python not found: {source_python}")
+    with tempfile.TemporaryDirectory(prefix="instplot-footprint-") as temporary:
+        measurement_environment = Path(temporary) / environment.name
+        shutil.copytree(environment, measurement_environment, symlinks=True)
+        python = _environment_python(measurement_environment)
+        before = environment_size(measurement_environment)
+        version_result = subprocess.run(
+            [
+                str(python),
+                "-I",
+                "-c",
+                "import importlib.metadata as m; print(m.version('PySide6-Essentials'))",
+            ],
+            text=True,
+            capture_output=True,
+        )
+        if version_result.returncode != 0:
+            raise RuntimeError(
+                version_result.stderr.strip() or "PySide6-Essentials is not installed"
+            )
+        version = version_result.stdout.strip()
+        install = subprocess.run(
+            [
+                str(python),
+                "-m",
+                "pip",
+                "install",
+                "--disable-pip-version-check",
+                f"PySide6=={version}",
+            ],
+            text=True,
+            capture_output=True,
+        )
+        if install.returncode != 0:
+            raise RuntimeError(
+                install.stderr.strip()
+                or install.stdout.strip()
+                or "full PySide6 install failed"
+            )
+        after = environment_size(measurement_environment)
         if after <= before:
             raise RuntimeError("full PySide6 did not increase the environment footprint")
         result = {
@@ -150,38 +166,6 @@ def measure_full_pyside(environment):
             "saved_bytes": after - before,
             "saved_percent": round((after - before) * 100 / after, 2),
         }
-    finally:
-        cleanup = subprocess.run(
-            [
-                str(python),
-                "-m",
-                "pip",
-                "uninstall",
-                "--yes",
-                "--disable-pip-version-check",
-                "PySide6",
-                "PySide6-Addons",
-            ],
-            text=True,
-            capture_output=True,
-        )
-        if cleanup.returncode != 0:
-            raise RuntimeError(
-                cleanup.stderr.strip()
-                or cleanup.stdout.strip()
-                or "full PySide6 cleanup failed"
-            )
-        dependency_check = subprocess.run(
-            [str(python), "-m", "pip", "check"],
-            text=True,
-            capture_output=True,
-        )
-        if dependency_check.returncode != 0:
-            raise RuntimeError(
-                dependency_check.stderr.strip()
-                or dependency_check.stdout.strip()
-                or "environment is unhealthy after full PySide6 cleanup"
-            )
     return result
 
 
