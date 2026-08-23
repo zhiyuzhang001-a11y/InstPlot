@@ -1,4 +1,7 @@
+import os
 from pathlib import Path
+
+import pytest
 
 from scripts.verify_install import run_smoke
 
@@ -26,6 +29,7 @@ def test_platform_install_entrypoints_are_local_and_non_privileged():
         assert "powershell" not in content.lower()
 
 
+@pytest.mark.skipif(os.name == "nt", reason="Windows filesystems do not expose POSIX execute bits")
 def test_unix_install_entrypoints_are_executable():
     for name in ["install_macos.command", "install_linux.sh"]:
         assert (ROOT / name).stat().st_mode & 0o111

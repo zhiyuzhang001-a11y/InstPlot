@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -68,7 +69,8 @@ def test_apply_uses_argument_lists_and_creates_owned_launcher(tmp_path):
     assert any("--require-hashes" in command and str(root / "requirements.lock") in command for command in runner.commands)
     launcher = root / "run_instplot.command"
     assert launcher.read_text(encoding="utf-8") == launcher_content("darwin")
-    assert launcher.stat().st_mode & 0o111
+    if os.name != "nt":
+        assert launcher.stat().st_mode & 0o111
 
 
 def test_broken_environment_requires_explicit_repair(tmp_path):

@@ -34,6 +34,13 @@ jobs:
           cache: pip
           cache-dependency-path: requirements.lock
 
+      - name: Install Linux GUI runtime prerequisite
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes libegl1
+
       - name: First install through Linux entrypoint
         if: runner.os == 'Linux'
         shell: bash
