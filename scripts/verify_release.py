@@ -138,17 +138,51 @@ def measure_full_pyside(environment):
     )
     if install.returncode != 0:
         raise RuntimeError(install.stderr.strip() or install.stdout.strip() or "full PySide6 install failed")
-    after = environment_size(environment)
-    if after <= before:
-        raise RuntimeError("full PySide6 did not increase the environment footprint")
-    return {
-        "platform": sys.platform,
-        "pyside_version": version,
-        "essentials_bytes": before,
-        "full_bytes": after,
-        "saved_bytes": after - before,
-        "saved_percent": round((after - before) * 100 / after, 2),
-    }
+    try:
+        after = environment_size(environment)
+        if after <= before:
+            raise RuntimeError("full PySide6 did not increase the environment footprint")
+        result = {
+            "platform": sys.platform,
+            "pyside_version": version,
+            "essentials_bytes": before,
+            "full_bytes": after,
+            "saved_bytes": after - before,
+            "saved_percent": round((after - before) * 100 / after, 2),
+        }
+    finally:
+        cleanup = subprocess.run(
+            [
+                str(python),
+                "-m",
+                "pip",
+                "uninstall",
+                "--yes",
+                "--disable-pip-version-check",
+                "PySide6",
+                "PySide6-Addons",
+            ],
+            text=True,
+            capture_output=True,
+        )
+        if cleanup.returncode != 0:
+            raise RuntimeError(
+                cleanup.stderr.strip()
+                or cleanup.stdout.strip()
+                or "full PySide6 cleanup failed"
+            )
+        dependency_check = subprocess.run(
+            [str(python), "-m", "pip", "check"],
+            text=True,
+            capture_output=True,
+        )
+        if dependency_check.returncode != 0:
+            raise RuntimeError(
+                dependency_check.stderr.strip()
+                or dependency_check.stdout.strip()
+                or "environment is unhealthy after full PySide6 cleanup"
+            )
+    return result
 
 
 def main():

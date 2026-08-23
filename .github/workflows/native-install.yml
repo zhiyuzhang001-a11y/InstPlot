@@ -140,6 +140,10 @@ jobs:
         shell: cmd
         run: call install_windows.bat --repair
 
+      - name: Measure Essentials versus full PySide6 footprint
+        shell: pwsh
+        run: python scripts/verify_release.py --measure-full-pyside .venv
+
       - name: Verify installed runtime and tests on Unix
         if: runner.os != 'Windows'
         shell: bash
@@ -157,10 +161,6 @@ jobs:
           .\.venv\Scripts\python.exe -I scripts\verify_install.py --json
           .\.venv\Scripts\python.exe -m pip install pytest==8.4.2
           .\.venv\Scripts\python.exe -m pytest -q
-
-      - name: Measure Essentials versus full PySide6 footprint
-        shell: pwsh
-        run: python scripts/verify_release.py --measure-full-pyside .venv
 
       - name: Show installer log after failure
         if: failure()
