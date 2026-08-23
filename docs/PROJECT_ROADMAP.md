@@ -3,8 +3,8 @@
 - 更新日期：`2026-08-23`
 - 总体状态：`M3-M4_COMPLETE / M5_SIZE_VALIDATION_PENDING / M6_COMPLETE / M7_PLANNED`
 - Model Handoff：`paused`，文件保留；本路线图和 `STATUS.md` 负责普通协作期间的进度记录。
-- 当前自动化基线：本机 `253 passed`；原生 CI Ubuntu/macOS 各 `253 passed`，Windows
-  `252 passed, 1 skipped`。clean CPython 3.12 Essentials-only 的 `pip check`、Qt、I/O、绘图、导出和
+- 当前自动化基线：本机 `254 passed`；原生 CI Ubuntu/macOS 各 `254 passed`，Windows
+  `253 passed, 1 skipped`。clean CPython 3.12 Essentials-only 的 `pip check`、Qt、I/O、绘图、导出和
   67 SVG 验证通过。M2 真实仪器文件验证仍延期到发布前。
 
 ## 总目标

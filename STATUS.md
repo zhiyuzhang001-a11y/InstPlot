@@ -4,8 +4,8 @@
 - Project state: `M3-M4 COMPLETE / M5 SIZE METRICS PENDING / M6 COMPLETE / M7 PLANNED`
 - Active plan: `M7 release acceptance planning`
 - Model Handoff Protocol: `paused`；文件保留，`MODEL_HANDOFF.md` 当前不参与普通工作路由。
-- Last verified baseline: local `253 passed`；GitHub 原生矩阵 Ubuntu/macOS 各 `253 passed`，Windows
-  `252 passed, 1 skipped`。三系统 clean CPython 3.12 Essentials 首次/重复/repair、`pip check`、
+- Last verified baseline: local `254 passed`；GitHub 原生矩阵 Ubuntu/macOS 各 `254 passed`，Windows
+  `253 passed, 1 skipped`。三系统 clean CPython 3.12 Essentials 首次/重复/repair、`pip check`、
   TXT/XLSX/CSV/PNG/67 SVG 和 offscreen 绘图均通过。
 
 ## Overall goal
@@ -32,7 +32,8 @@ macOS、Linux 对应的一键隔离环境安装和启动。
 2. Footprint：macOS Essentials 已将 clean 环境从 1,487,064 降至 607,412 KiB（-59.15%）；
    Windows/Linux 功能兼容已通过，但各自完整 PySide6 对照体积尚未采集。
 3. Installation：共享安装器和三系统入口已通过原生 CI 的首次、重复、repair 和安装后功能验证；
-   Ubuntu 运行 PySide6 前需要宿主系统提供 `libEGL.so.1`（CI 使用 `libegl1`）。
+   Ubuntu 运行 PySide6 前需要宿主系统提供 `libEGL.so.1`（CI 使用 `libegl1`）；日志文件使用时间戳前缀
+   和原子唯一分配，避免 Windows 低时钟分辨率下的名称碰撞。
 4. Release：真实仪器文件、普通用户实机复核和最终用户文档尚未闭环。
 5. Fonts：macOS 缺少 `SimHei` 时正式基准出现重复 Matplotlib 字体回退日志；改字体可能影响外观，
    留到 M7 配置化处理。

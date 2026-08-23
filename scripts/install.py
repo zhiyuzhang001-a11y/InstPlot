@@ -12,6 +12,7 @@ import shlex
 import shutil
 import subprocess
 import sys
+import tempfile
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -186,8 +187,14 @@ def _open_log(root):
         raise InstallError("conflict", f"unsafe install log directory: {directory}")
     directory.mkdir(mode=0o755, exist_ok=True)
     timestamp = datetime.now().strftime("%Y%m%d-%H%M%S-%f")
-    path = directory / f"install-{timestamp}.log"
-    return path, path.open("x", encoding="utf-8")
+    descriptor, name = tempfile.mkstemp(
+        prefix=f"install-{timestamp}-",
+        suffix=".log",
+        dir=directory,
+        text=True,
+    )
+    path = Path(name)
+    return path, os.fdopen(descriptor, "w", encoding="utf-8")
 
 
 def _run_checked(runner, command, root, log, log_path):

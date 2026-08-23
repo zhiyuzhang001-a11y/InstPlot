@@ -60,3 +60,7 @@
   TXT/XLSX/CSV/PNG/67-SVG smoke, and the full test suite.
 - M6 is complete. The installer still does not elevate privileges or silently install host software; Linux users need
   a distribution package providing `libEGL.so.1` before the PySide6 GUI can run.
+- A later Windows rerun exposed a real low-resolution clock collision when two failure logs received the same
+  microsecond timestamp. Log creation now retains the timestamp prefix while using the operating system's atomic
+  unique-file allocation. A dedicated collision regression increased the suite to 254 tests; the current native
+  matrix passes 254 tests on Ubuntu/macOS and 253 plus one POSIX-only skip on Windows.

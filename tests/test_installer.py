@@ -4,7 +4,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from scripts.install import InstallError, install, launcher_content
+from scripts.install import InstallError, _open_log, install, launcher_content
 
 
 def _project(tmp_path):
@@ -32,6 +32,17 @@ class FakeRunner:
             python.write_text("", encoding="utf-8")
             python.chmod(0o755)
         return SimpleNamespace(returncode=0, stdout="ok\n", stderr="")
+
+
+def test_install_logs_are_atomically_unique(tmp_path):
+    first_path, first_log = _open_log(tmp_path)
+    second_path, second_log = _open_log(tmp_path)
+    first_log.close()
+    second_log.close()
+
+    assert first_path != second_path
+    assert first_path.is_file()
+    assert second_path.is_file()
 
 
 def test_dry_run_is_zero_write_and_preserves_unicode_space_path(tmp_path):
