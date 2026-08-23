@@ -1,10 +1,10 @@
 # PlotApp 当前执行路线图
 
 - 更新日期：`2026-08-23`
-- 总体状态：`M3-M4_COMPLETE / M5_SIZE_VALIDATION_PENDING / M6_COMPLETE / M7_IN_PROGRESS`
+- 总体状态：`M3-M6_COMPLETE / M7_PENDING_USER_VALIDATION`
 - Model Handoff：`paused`，文件保留；本路线图和 `STATUS.md` 负责普通协作期间的进度记录。
-- 当前自动化基线：本机 `254 passed`；原生 CI Ubuntu/macOS 各 `254 passed`，Windows
-  `253 passed, 1 skipped`。clean CPython 3.12 Essentials-only 的 `pip check`、Qt、I/O、绘图、导出和
+- 当前自动化基线：本机 `258 passed`；原生 CI Ubuntu/macOS 各 `258 passed`，Windows
+  `257 passed, 1 skipped`。clean CPython 3.12 Essentials-only 的 `pip check`、Qt、I/O、绘图、导出和
   67 SVG 验证通过。M2 真实仪器文件验证仍延期到发布前。
 
 ## 总目标
@@ -98,14 +98,15 @@ CPython 3.12.14 installed-wheel `203 passed, 6 warnings in 51.14s`，wheel 四�
 验收：固定大数据集上无明显性能回退；耗时任务不长期阻塞主线程；关闭窗口能安全取消任务；完整功能
 和 GUI 冒烟测试通过。每项必须给出前后耗时、峰值内存或帧延迟，不能只写“更流畅”。
 
-## 阶段 F — M5 依赖和安装体积 — PENDING_VALIDATION
+## 阶段 F — M5 依赖和安装体积 — COMPLETE
 
 目标：在不改变功能的情况下减少不必要依赖和安装资源。
 
 工作：macOS 已完成 `PySide6-Essentials` 迁移、通用锁更新、依赖用途、wheel 资源、环境落盘和启动内存
 验证；环境从 1,487,064 降至 607,412 KiB（-59.15%），本机/Essentials wheel 均为 238 passed。
-Windows/Linux Essentials 功能验证已随 M6 原生矩阵通过；两系统完整 PySide6 对照体积尚未采集，转入
-M7 发布度量，不影响已验证的功能兼容。不得为了体积擅自替换 Pandas/SciPy/Matplotlib。
+Windows/Linux Essentials 功能验证已随 M6 原生矩阵通过；M7 原生 CI 又完成同版本 Essentials/full
+PySide6 隔离体积比较：Linux、macOS、Windows 分别节省 `40.54%`、`57.97%`、`44.25%`。不得为了体积
+擅自替换 Pandas/SciPy/Matplotlib。
 
 验收：三系统完整功能通过并给出前后体积；若 Essentials 不兼容，记录证据后保留完整 PySide6。
 
@@ -124,7 +125,7 @@ Ubuntu/macOS 各 254 项，Windows 253 项加一个 POSIX 可执行位跳过。�
 验收：三系统干净环境首次/重复/修复安装；中文和空格路径；失败非零退出码；安装后 TXT/XLSX 导入、
 绘图及 PNG/CSV/XLSX 导出冒烟测试。不得默认请求管理员权限或修改系统 Python。
 
-## 阶段 H — M7 发布验收与真实样本 — IN_PROGRESS
+## 阶段 H — M7 发布验收与真实样本 — PENDING_USER_VALIDATION
 
 目标：形成可交付版本、CI、用户说明和风险清单。
 
@@ -133,7 +134,9 @@ Ubuntu/macOS 各 254 项，Windows 253 项加一个 POSIX 可执行位跳过。�
 
 当前结果：已增加 `docs/M7_RELEASE_PLAN.md`、`reports/M7-release.md` 和标准库发布验证器；README
 占位链接、平台、磁盘、Linux EGL、故障排查及格式边界已修订；固定 `uv 0.12.5` 本地字节级重建锁通过。
-三系统体积 CI 已就绪，真实仪器文件和人工桌面会话仍保持待验证。
+固定 `uv 0.12.5` 字节级锁重建及三系统 CI run `32648822899` 已通过；Ubuntu/macOS 各 258 项，Windows
+257 项加一个 POSIX-only 跳过。三系统同版本体积证据已记录并关闭 M5。真实仪器文件和人工桌面会话
+仍保持待验证，不能宣称 M7 完全完成。
 
 验收：三系统 CI 和安装矩阵全绿；真实样本列名/列数/值正确；锁文件可重建；限制与磁盘需求准确。
 若发布前仍没有真实仪器文件，则状态必须保留 `PENDING_USER_VALIDATION`，不能宣称完全发布验收。
@@ -148,4 +151,4 @@ Ubuntu/macOS 各 254 项，Windows 253 项加一个 POSIX 可执行位跳过。�
 
 ## 唯一下一步
 
-提交并运行 M7.1 三系统发布/体积门禁；真实仪器文件继续等待用户样本。
+取得脱敏真实仪器样本，验证列名、列数和数值，并完成一次普通用户桌面启动复核。

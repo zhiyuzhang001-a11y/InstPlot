@@ -1,6 +1,6 @@
 # M7 发布验收计划
 
-- 状态：`IN_PROGRESS / REAL_INSTRUMENT_FILES PENDING_USER_VALIDATION`
+- 状态：`M7.1-M7.2 COMPLETE / M7.3 PENDING_USER_VALIDATION`
 - 版本：`1.0.0`
 - 发布形态：源代码目录加三系统入口；不制作 App、DMG、MSI、EXE 或 AppImage。
 - 运行时：CPython 3.12；不在 M7 临时扩展到 3.11/3.13。
@@ -16,10 +16,10 @@
 
 ## M7.2 跨系统体积证据
 
-1. 三系统在完整功能测试后统计 Essentials 环境的逻辑文件字节数。
+1. 三系统在安装和 repair 后、加入测试依赖前统计 Essentials 环境的逻辑文件字节数。
 2. 在同一环境安装与 Essentials 完全同版本的完整 `PySide6`，再次统计逻辑文件字节数。
 3. 记录两者差值和节省比例；若任一系统没有缩小，M5 保持 `PENDING_VALIDATION` 并调查。
-4. 体积测量只修改临时 CI 环境，不改变项目运行依赖或用户安装器。
+4. 体积测量复制现有环境并只修改临时副本，不改变原测试环境、项目运行依赖或用户安装器。
 
 ## M7.3 普通用户与真实样本
 
@@ -30,5 +30,6 @@
 
 ## 验收记录
 
-证据集中记录到 `reports/M7-release.md`。阶段结束时同步更新 `STATUS.md` 和
-`docs/PROJECT_ROADMAP.md`，并保留唯一下一动作。
+M7.1-M7.2 已由 GitHub Actions run `32648822899` 验收通过，详细证据集中记录到
+`reports/M7-release.md`。M7.3 在收到真实样本和桌面会话复核前保持待验证；`STATUS.md` 和
+`docs/PROJECT_ROADMAP.md` 保留唯一下一动作。
