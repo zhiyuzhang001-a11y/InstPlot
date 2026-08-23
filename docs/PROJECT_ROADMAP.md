@@ -1,7 +1,7 @@
 # PlotApp 当前执行路线图
 
 - 更新日期：`2026-08-23`
-- 总体状态：`M3-M4_COMPLETE / M5_SIZE_VALIDATION_PENDING / M6_COMPLETE / M7_PLANNED`
+- 总体状态：`M3-M4_COMPLETE / M5_SIZE_VALIDATION_PENDING / M6_COMPLETE / M7_IN_PROGRESS`
 - Model Handoff：`paused`，文件保留；本路线图和 `STATUS.md` 负责普通协作期间的进度记录。
 - 当前自动化基线：本机 `254 passed`；原生 CI Ubuntu/macOS 各 `254 passed`，Windows
   `253 passed, 1 skipped`。clean CPython 3.12 Essentials-only 的 `pip check`、Qt、I/O、绘图、导出和
@@ -116,20 +116,24 @@ M7 发布度量，不影响已验证的功能兼容。不得为了体积擅自�
 工作：实现标准库共享安装核心及 Windows `.bat`、macOS `.command`、Linux `.sh`；创建项目内 `.venv`；
 支持已有 Python、受控 Python/uv、dry-run、幂等、repair、代理/离线提示、日志和启动器。
 
-完成结果：上述核心和三个入口均已实现。最终 GitHub 原生矩阵运行 `32647577404` 全绿：Ubuntu/macOS
-各 253 项，Windows 252 项加一个 POSIX 可执行位跳过。三系统均完成首次安装、健康重复、缺包识别、
+完成结果：上述核心和三个入口均已实现，后续日志碰撞回归也已进入矩阵。当前 GitHub 原生矩阵全绿：
+Ubuntu/macOS 各 254 项，Windows 253 项加一个 POSIX 可执行位跳过。三系统均完成首次安装、健康重复、缺包识别、
 无 repair 非零失败、显式 repair、哈希锁、`pip check` 和安装后 I/O/绘图/资源冒烟。Linux CI 明确安装
 宿主 `libegl1`；项目安装器保持不提权、不静默安装系统软件。
 
 验收：三系统干净环境首次/重复/修复安装；中文和空格路径；失败非零退出码；安装后 TXT/XLSX 导入、
 绘图及 PNG/CSV/XLSX 导出冒烟测试。不得默认请求管理员权限或修改系统 Python。
 
-## 阶段 H — M7 发布验收与真实样本 — PLANNED
+## 阶段 H — M7 发布验收与真实样本 — IN_PROGRESS
 
 目标：形成可交付版本、CI、用户说明和风险清单。
 
 工作：重建锁文件；普通用户安装复核；补充真实仪器 TXT/DAT/VSM/XLS/XLSX 样本验证；修订 README
 中的平台前置条件、磁盘、错误排查、版本和联系方式；补充 Windows/Linux 对照体积。
+
+当前结果：已增加 `docs/M7_RELEASE_PLAN.md`、`reports/M7-release.md` 和标准库发布验证器；README
+占位链接、平台、磁盘、Linux EGL、故障排查及格式边界已修订；固定 `uv 0.12.5` 本地字节级重建锁通过。
+三系统体积 CI 已就绪，真实仪器文件和人工桌面会话仍保持待验证。
 
 验收：三系统 CI 和安装矩阵全绿；真实样本列名/列数/值正确；锁文件可重建；限制与磁盘需求准确。
 若发布前仍没有真实仪器文件，则状态必须保留 `PENDING_USER_VALIDATION`，不能宣称完全发布验收。
@@ -144,4 +148,4 @@ M7 发布度量，不影响已验证的功能兼容。不得为了体积擅自�
 
 ## 唯一下一步
 
-制定 M7.1 发布说明、锁文件可重建性和普通用户安装复核计划；真实仪器文件继续等待用户样本。
+提交并运行 M7.1 三系统发布/体积门禁；真实仪器文件继续等待用户样本。

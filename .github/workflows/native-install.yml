@@ -9,6 +9,24 @@ permissions:
   contents: read
 
 jobs:
+  release:
+    name: Release metadata and lock
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v6
+
+      - name: Set up CPython 3.12
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Verify documentation and reproducible lock
+        run: |
+          python -m pip install --disable-pip-version-check uv==0.12.5
+          python scripts/verify_release.py --check-docs --check-lock
+
   install:
     name: Install / ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
@@ -139,6 +157,10 @@ jobs:
           .\.venv\Scripts\python.exe -I scripts\verify_install.py --json
           .\.venv\Scripts\python.exe -m pip install pytest==8.4.2
           .\.venv\Scripts\python.exe -m pytest -q
+
+      - name: Measure Essentials versus full PySide6 footprint
+        shell: pwsh
+        run: python scripts/verify_release.py --measure-full-pyside .venv
 
       - name: Show installer log after failure
         if: failure()

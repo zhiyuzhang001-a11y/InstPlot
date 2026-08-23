@@ -1,10 +1,10 @@
 # Current project status
 
 - Date: `2026-08-23`
-- Project state: `M3-M4 COMPLETE / M5 SIZE METRICS PENDING / M6 COMPLETE / M7 PLANNED`
-- Active plan: `M7 release acceptance planning`
+- Project state: `M3-M4 COMPLETE / M5 SIZE METRICS PENDING / M6 COMPLETE / M7 IN_PROGRESS`
+- Active plan: `docs/M7_RELEASE_PLAN.md`
 - Model Handoff Protocol: `paused`；文件保留，`MODEL_HANDOFF.md` 当前不参与普通工作路由。
-- Last verified baseline: local `254 passed`；GitHub 原生矩阵 Ubuntu/macOS 各 `254 passed`，Windows
+- Last verified baseline: local `257 passed`；最近完成的 GitHub 原生矩阵 Ubuntu/macOS 各 `254 passed`，Windows
   `253 passed, 1 skipped`。三系统 clean CPython 3.12 Essentials 首次/重复/repair、`pip check`、
   TXT/XLSX/CSV/PNG/67 SVG 和 offscreen 绘图均通过。
 
@@ -25,16 +25,18 @@ macOS、Linux 对应的一键隔离环境安装和启动。
   列、行、文件和组合命令支持精确 undo/redo，八处旧 GUI owner 尚未迁移。
 - M3.4 GUI 历史迁移和 M3.5 验收完成：八处快照归零，redo/会话 reset/原子发布接入；正式基准
   `160,010,560 / 640,005,280 bytes = 25.00%`，十步往返通过。
+- M4 GUI/性能、M5 Essentials 功能兼容和 M6 三系统安装矩阵已完成；M5 只剩 Windows/Linux 体积数字。
+- M7 已建立发布文档、真实仓库元数据和标准库发布验证器；`uv 0.12.5` 本地重建哈希锁字节一致。
 
 ## Current unresolved issues
 
 1. GUI：大型 `PlotApp` 仍影响维护性，但 M4 的异步导入/拟合、交互重绘和诊断边界已闭环。
-2. Footprint：macOS Essentials 已将 clean 环境从 1,487,064 降至 607,412 KiB（-59.15%）；
-   Windows/Linux 功能兼容已通过，但各自完整 PySide6 对照体积尚未采集。
+2. Footprint：macOS Essentials 已将 clean 环境从 1,487,064 降至 607,412 KiB（-59.15%）；新的
+   三系统同版本 Essentials/full PySide6 逻辑字节测量门禁已就绪，等待 CI 数据。
 3. Installation：共享安装器和三系统入口已通过原生 CI 的首次、重复、repair 和安装后功能验证；
    Ubuntu 运行 PySide6 前需要宿主系统提供 `libEGL.so.1`（CI 使用 `libegl1`）；日志文件使用时间戳前缀
    和原子唯一分配，避免 Windows 低时钟分辨率下的名称碰撞。
-4. Release：真实仪器文件、普通用户实机复核和最终用户文档尚未闭环。
+4. Release：README 和自动发布门禁已更新；真实仪器文件及普通用户桌面会话复核仍未闭环。
 5. Fonts：macOS 缺少 `SimHei` 时正式基准出现重复 Matplotlib 字体回退日志；改字体可能影响外观，
    留到 M7 配置化处理。
 6. Packaging：许可证元数据已迁移到 SPDX `MIT` 和 `license-files`，warnings-as-error 构建通过。
@@ -50,4 +52,4 @@ macOS、Linux 对应的一键隔离环境安装和启动。
 
 ## Next action
 
-`制定并执行 M7.1 发布说明、锁文件可重建性和普通用户安装复核；真实仪器文件验收继续标记为待用户样本。`
+`提交 M7.1 门禁并运行三系统 CI，记录 Windows/macOS/Linux 体积；真实仪器文件继续等待用户样本。`

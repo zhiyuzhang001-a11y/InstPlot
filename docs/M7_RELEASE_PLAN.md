@@ -1,0 +1,34 @@
+# M7 发布验收计划
+
+- 状态：`IN_PROGRESS / REAL_INSTRUMENT_FILES PENDING_USER_VALIDATION`
+- 版本：`1.0.0`
+- 发布形态：源代码目录加三系统入口；不制作 App、DMG、MSI、EXE 或 AppImage。
+- 运行时：CPython 3.12；不在 M7 临时扩展到 3.11/3.13。
+
+## M7.1 自动化发布门禁
+
+1. README 版本必须与 `pyproject.toml` 一致，不得包含占位邮箱或仓库链接。
+2. README 必须覆盖 Windows、macOS、Linux、至少 1 GB 磁盘、Linux `libEGL.so.1`、repair、日志、
+   数据格式边界和真实样本限制。
+3. 使用固定 `uv 0.12.5` 从 `pyproject.toml` 重新生成通用哈希锁，结果必须与 `requirements.lock`
+   字节相同。
+4. Windows、macOS、Ubuntu 继续运行 M6 的首次安装、健康重复、缺包门禁、repair、安装后冒烟和完整测试。
+
+## M7.2 跨系统体积证据
+
+1. 三系统在完整功能测试后统计 Essentials 环境的逻辑文件字节数。
+2. 在同一环境安装与 Essentials 完全同版本的完整 `PySide6`，再次统计逻辑文件字节数。
+3. 记录两者差值和节省比例；若任一系统没有缩小，M5 保持 `PENDING_VALIDATION` 并调查。
+4. 体积测量只修改临时 CI 环境，不改变项目运行依赖或用户安装器。
+
+## M7.3 普通用户与真实样本
+
+1. 干净 CI runner 作为无开发依赖的自动替代验收，但不能替代真实桌面用户双击启动。
+2. 尚无用户真实 TXT/DAT/VSM/XLS/XLSX 文件；自动 fixture 不能证明厂商私有变体兼容。
+3. 在收到样本前，M7 总状态只能是 `PENDING_USER_VALIDATION`，不得宣称最终发布验收完成。
+4. 收到样本后只核对列名、列数、数值、编码/分隔符决策和错误位置，不把样本内容提交到公开仓库。
+
+## 验收记录
+
+证据集中记录到 `reports/M7-release.md`。阶段结束时同步更新 `STATUS.md` 和
+`docs/PROJECT_ROADMAP.md`，并保留唯一下一动作。

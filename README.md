@@ -8,7 +8,7 @@
 
 [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](#)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS-lightgrey.svg)](#)
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](#)
 
 </div>
 
@@ -16,13 +16,13 @@
 
 ## 📖 简介
 
-**InstPlot** 主要用于对实验数据的即使观察和预处理，具有操作简单和快速的特点。
+**InstPlot** 主要用于实验数据的即时观察和预处理，具有操作简单和响应快速的特点。
 
 ### ✨ 核心特性
 
-- 📊 **多数据源导入** - 支持 dat、TXT、Excel、"VSM" 等多种数据格式
+- 📊 **多数据源导入** - 支持 TXT、CSV、DAT（含自动识别的 VSM 数据）、XLS 和 XLSX
 - 🎯 **智能数据处理** - 内置对称处理、归一化、背景去除等功能
-- 🖱️ **交互式操作** - 缩放、矩形选择、矩形选择
+- 🖱️ **交互式操作** - 缩放、平移、单点选择和矩形选择
 - 💾 **图片导出** - 支持 PNG、JPG、SVG、PDF 等多种图片格式
 - 📊 **数据导出** - 支持 CSV、TXT、Excel 等格式
 ---
@@ -139,19 +139,22 @@
 
 ---
 
-## �️ 系统要求
+## 🖥️ 系统要求
 
-- **Python**: 3.12（M1 已验证目标版本）
-- **操作系统**: Windows 10+ / macOS 10.14+ / 主流 Linux 发行版
-- **RAM**: 至少 2 GB
-- **磁盘**: 至少 500 MB 可用空间
+- **Python**：仅支持 CPython 3.12；3.11 和 3.13 尚未进入发布矩阵。
+- **操作系统**：Windows、macOS 或带桌面环境的 Linux。自动化发布矩阵使用 GitHub 当前的
+  `windows-latest`、`macos-latest` 和 Ubuntu `ubuntu-latest`；其他版本应以 Qt for Python 当前支持范围为准。
+- **内存**：至少 2 GB；处理大型文件时建议 4 GB 或更多。
+- **磁盘**：项目所在磁盘至少 1 GB 可用空间；依赖安装在项目内 `.venv`。
+- **Linux 图形库**：系统必须提供 `libEGL.so.1`。Ubuntu/Debian 可在安装 InstPlot 前由管理员运行
+  `sudo apt-get install libegl1`；其他发行版请安装提供同名库的系统包。InstPlot 安装器不会自行提权。
 
 ---
 
 ## ⚡ 一键安装与启动
 
-下载或解压项目后，根据系统运行对应入口。安装器只创建项目内 `.venv`，不会修改系统 Python，也不
-需要管理员权限。
+下载或解压项目后，根据系统运行对应入口。安装器只创建项目内 `.venv`，不会修改系统 Python，也不会
+自动下载 Python、uv 或系统软件。Linux 的图形库前置条件需由用户或管理员提前完成。
 
 - Windows：双击 `install_windows.bat`
 - macOS：双击 `install_macos.command`；若下载后没有执行权限，先运行
@@ -192,8 +195,15 @@ python -m pip install -r requirements.txt
 python -m pip install --no-deps .
 ```
 
-`requirements.lock` 是以 Python 3.12 生成、包含哈希的通用初始锁定文件。依赖升级后，请使用
-`requirements.txt` 中记录的命令重新生成它，并在 Windows、macOS、Linux 安装流程中验证。
+`requirements.lock` 是以 Python 3.12 生成、包含哈希的通用锁定文件。使用经过发布验证的 uv 版本
+重新生成时运行：
+
+```bash
+uv pip compile pyproject.toml --python-version 3.12 --universal --generate-hashes --output-file requirements.lock
+```
+
+提交锁文件前必须运行 `python scripts/verify_release.py --check-lock`，并在 Windows、macOS、Linux
+安装矩阵中验证。
 
 ### 2. 运行程序
 
@@ -230,9 +240,26 @@ python -m pip install --no-deps .
 - Linux：`$XDG_STATE_HOME/instplot/instplot.log`，未设置时为 `~/.local/state/instplot/instplot.log`
 - 自定义位置：启动前设置环境变量 `INSTPLOT_LOG_DIR`
 
+## 安装故障排查
+
+- 安装器报告 `repair-needed`：重新运行系统对应入口并增加 `--repair`。安装器不会在未授权时重装环境。
+- 安装器报告 `conflict`：不要删除或覆盖提示的 `.venv`/启动器；先备份用户修改，再人工处理冲突。
+- Linux 报告找不到 `libEGL.so.1`：先安装发行版提供的 EGL 运行库；Ubuntu/Debian 包名通常为 `libegl1`。
+- 找不到 Python：安装 CPython 3.12 或 uv 后重试；不要使用项目未验证的 Python 3.11/3.13。
+- 仍然失败：保留 `.install-logs` 中最新安装日志和上方“诊断日志”对应的平台日志，在 GitHub Issue
+  中附上系统版本、复现步骤和错误文本；不要上传包含敏感数据的原始实验文件。
+
+## 当前限制
+
+- 自动化样本已经覆盖 TXT、CSV、DAT、XLS 和 XLSX 的主要解析边界，但尚未获得用户的真实仪器
+  TXT/DAT/VSM/XLS/XLSX 文件做最终对照，因此该项状态为 `PENDING_USER_VALIDATION`。
+- VSM 当前指可从内容识别的 VSM 风格 `.dat` 文件，不代表支持任意 `.vsm` 扩展名或厂商私有变体。
+- Linux 不生成 `.desktop` 文件；Windows/macOS/Linux 都通过项目目录中的启动脚本运行。
+- 本项目不提供 `.app`、DMG、MSI、独立 EXE 或 AppImage。
+
 ---
 
-## �🙏 致谢
+## 🙏 致谢
 
 感谢以下开源项目的支持：
 - [Python](https://www.python.org/)
@@ -267,9 +294,7 @@ python -m pip install --no-deps .
 
 ## 📞 联系方式
 
-- 📧 Email: [your-email@example.com]
-- 🐛 Bug 反馈: [GitHub Issues](https://github.com/yourusername/InstPlot/issues)
-- 💡 功能建议: [GitHub Discussions](https://github.com/yourusername/InstPlot/discussions)
+- 🐛 Bug 反馈与功能建议：[GitHub Issues](https://github.com/zhiyuzhang001-a11y/InstPlot/issues)
 
 ---
 
