@@ -25,6 +25,10 @@ venv/
 ENV/
 env/
 .venv
+.install-logs/
+run_instplot.bat
+run_instplot.command
+run_instplot.sh
 
 # IDE和编辑器
 .vscode/

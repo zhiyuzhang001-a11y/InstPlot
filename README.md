@@ -141,14 +141,34 @@
 
 ## �️ 系统要求
 
-- **Python**: 3.8 及以上版本
-- **操作系统**: Windows 10+ / macOS 10.14+
+- **Python**: 3.12（M1 已验证目标版本）
+- **操作系统**: Windows 10+ / macOS 10.14+ / 主流 Linux 发行版
 - **RAM**: 至少 2 GB
 - **磁盘**: 至少 500 MB 可用空间
 
 ---
 
-## ⚡ 快速开始
+## ⚡ 一键安装与启动
+
+下载或解压项目后，根据系统运行对应入口。安装器只创建项目内 `.venv`，不会修改系统 Python，也不
+需要管理员权限。
+
+- Windows：双击 `install_windows.bat`
+- macOS：双击 `install_macos.command`；若下载后没有执行权限，先运行
+  `chmod +x install_macos.command`
+- Linux：运行 `./install_linux.sh`；必要时先运行 `chmod +x install_linux.sh`
+
+安装成功后会自动启动。以后可直接运行生成的 `run_instplot.bat`、`run_instplot.command` 或
+`run_instplot.sh`。修复已有环境时，在终端运行对应安装入口并增加 `--repair`。
+
+安装器需要 Python 3.12 或现有的 uv。如果两者都不存在，它会停止并显示安装指引，不会自动执行远程
+脚本。安装日志位于项目的 `.install-logs`。仅检查计划而不写入时可运行：
+
+```bash
+python scripts/install.py --json
+```
+
+## 手动安装
 
 ### 1. 安装依赖
 
@@ -157,15 +177,29 @@
 git clone https://github.com/zhiyuzhang001-a11y/InstPlot.git
 cd InstPlot
 
-# 安装所需依赖
-pip install -r requirements.txt
+# macOS / Linux：创建隔离环境（避免依赖当前系统 Python）
+python3.12 -m venv .venv
+
+source .venv/bin/activate
+
+# Windows PowerShell：创建并激活隔离环境
+# py -3.12 -m venv .venv
+# .venv\Scripts\Activate.ps1
+
+# 按 `requirements.lock` 的固定版本安装运行依赖，再安装本项目
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+python -m pip install --no-deps .
 ```
+
+`requirements.lock` 是以 Python 3.12 生成、包含哈希的通用初始锁定文件。依赖升级后，请使用
+`requirements.txt` 中记录的命令重新生成它，并在 Windows、macOS、Linux 安装流程中验证。
 
 ### 2. 运行程序
 
 ```bash
 # 直接运行主程序
-python InstPlot.py
+python -m InstPlot
 ```
 
 
@@ -181,9 +215,20 @@ cd InstPlot
 # 获取最新代码
 git pull origin main
 
-# 更新依赖（如需要）
-pip install -r requirements.txt --upgrade
+# 更新锁定依赖与程序
+python -m pip install -r requirements.txt
+python -m pip install --no-deps .
 ```
+
+## 诊断日志
+
+程序会保存轮转诊断日志，单个文件最多 1MB，并保留 3 个备份。未捕获错误会显示“复制错误详情”按钮，
+便于远程排查；日志不会主动写入导入表格的行内容。
+
+- macOS：`~/Library/Logs/InstPlot/instplot.log`
+- Windows：`%LOCALAPPDATA%\InstPlot\Logs\instplot.log`
+- Linux：`$XDG_STATE_HOME/instplot/instplot.log`，未设置时为 `~/.local/state/instplot/instplot.log`
+- 自定义位置：启动前设置环境变量 `INSTPLOT_LOG_DIR`
 
 ---
 
