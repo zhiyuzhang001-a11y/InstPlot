@@ -93,8 +93,10 @@ jobs:
           if (-not (Select-String -Path repair-state.json -Pattern '"state": "repair-needed"')) {
             throw "repair-needed state was not reported"
           }
-          python scripts/install.py --apply --json
-          if ($LASTEXITCODE -eq 0) {
+          $result = Start-Process -FilePath python -ArgumentList @(
+            "scripts/install.py", "--apply", "--json"
+          ) -NoNewWindow -Wait -PassThru
+          if ($result.ExitCode -eq 0) {
             throw "unhealthy apply unexpectedly succeeded"
           }
 
@@ -130,3 +132,17 @@ jobs:
           .\.venv\Scripts\python.exe -I scripts\verify_install.py --json
           .\.venv\Scripts\python.exe -m pip install pytest==8.4.2
           .\.venv\Scripts\python.exe -m pytest -q
+
+      - name: Show installer log after failure
+        if: failure()
+        shell: pwsh
+        run: |
+          $latest = Get-ChildItem .install-logs -Filter *.log -ErrorAction SilentlyContinue |
+            Sort-Object LastWriteTime |
+            Select-Object -Last 1
+          if ($latest) {
+            Write-Host "Installer log: $($latest.FullName)"
+            Get-Content $latest.FullName
+          } else {
+            Write-Host "No installer log was created."
+          }
