@@ -1,11 +1,12 @@
 # Current project status
 
 - Date: `2026-08-23`
-- Project state: `M3-M4 COMPLETE / M5-M6 MACOS IMPLEMENTED / WINDOWS-LINUX PENDING`
-- Active plan: `docs/M6_INSTALLER_CONTRACT.md`
+- Project state: `M3-M4 COMPLETE / M5 SIZE METRICS PENDING / M6 COMPLETE / M7 PLANNED`
+- Active plan: `M7 release acceptance planning`
 - Model Handoff Protocol: `paused`；文件保留，`MODEL_HANDOFF.md` 当前不参与普通工作路由。
-- Last verified baseline: local `253 passed` 且 warnings-as-error；中文空格路径的 clean CPython 3.12
-  Essentials 安装、首次/重复/repair、`pip check`、TXT/XLSX/CSV/PNG/67 SVG 和 offscreen 绘图通过。
+- Last verified baseline: local `253 passed`；GitHub 原生矩阵 Ubuntu/macOS 各 `253 passed`，Windows
+  `252 passed, 1 skipped`。三系统 clean CPython 3.12 Essentials 首次/重复/repair、`pip check`、
+  TXT/XLSX/CSV/PNG/67 SVG 和 offscreen 绘图均通过。
 
 ## Overall goal
 
@@ -28,14 +29,14 @@ macOS、Linux 对应的一键隔离环境安装和启动。
 ## Current unresolved issues
 
 1. GUI：大型 `PlotApp` 仍影响维护性，但 M4 的异步导入/拟合、交互重绘和诊断边界已闭环。
-2. Footprint：macOS Essentials 已将 clean 环境从 1,487,064 降至 607,412 KiB（-59.15%）；Windows/Linux
-   验证待 M6 安装矩阵完成。
-3. Installation：共享安装器和三系统入口已实现；macOS 首次/重复/repair/中文空格路径通过，Windows/Linux
-   原生 CI 工作流已就绪但尚未提交运行。
-4. Release：Windows/Linux 实机或 CI、真实仪器文件和最终用户文档尚未闭环。
+2. Footprint：macOS Essentials 已将 clean 环境从 1,487,064 降至 607,412 KiB（-59.15%）；
+   Windows/Linux 功能兼容已通过，但各自完整 PySide6 对照体积尚未采集。
+3. Installation：共享安装器和三系统入口已通过原生 CI 的首次、重复、repair 和安装后功能验证；
+   Ubuntu 运行 PySide6 前需要宿主系统提供 `libEGL.so.1`（CI 使用 `libegl1`）。
+4. Release：真实仪器文件、普通用户实机复核和最终用户文档尚未闭环。
 5. Fonts：macOS 缺少 `SimHei` 时正式基准出现重复 Matplotlib 字体回退日志；改字体可能影响外观，
-   留到 M4.4 配置化处理。
-6. Packaging：setuptools table-form `project.license` 的未来弃用仍待发布元数据阶段处理。
+   留到 M7 配置化处理。
+6. Packaging：许可证元数据已迁移到 SPDX `MIT` 和 `license-files`，warnings-as-error 构建通过。
 
 ## Stage order
 
@@ -48,4 +49,4 @@ macOS、Linux 对应的一键隔离环境安装和启动。
 
 ## Next action
 
-`经用户授权后提交并推送当前累计改动，观察三系统原生 CI；或由用户提供独立分支/提交策略。`
+`制定并执行 M7.1 发布说明、锁文件可重建性和普通用户安装复核；真实仪器文件验收继续标记为待用户样本。`

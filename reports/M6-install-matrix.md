@@ -36,7 +36,7 @@
   passed. Windows and Linux wrappers have static/pure-core coverage but no native runtime execution yet, so M6 and the
   cross-platform part of M5 remain pending rather than being reported complete.
 
-## Native CI matrix preparation — 2026-08-23 — READY / NOT YET RUN
+## Native CI matrix — 2026-08-23 — COMPLETE
 
 - Added `.github/workflows/native-install.yml` for `ubuntu-latest`, `macos-latest`, and `windows-latest`, with read-only
   repository permission and explicit CPython 3.12. It uses the current official major examples
@@ -48,6 +48,15 @@
 - Two failure-first tests froze the three runners, all entrypoints, repair, smoke, pytest, permissions and nonlaunching
   wrapper mode. Directed installer/CI suite passed 15 items; final local warnings-as-error suite passed
   `253 passed in 4.11s`, shell syntax, YAML parsing, compilation and `git diff --check` passed.
-- The workflow is local only. The working tree contains the accumulated uncommitted project implementation, so no
-  commit or push was made without explicit user authorization. Consequently this section does not claim Windows or
-  Linux results yet.
+- After authorization, the accumulated project work was committed to `codex/m6-native-ci` and the workflow was run
+  on GitHub. The first run exposed deprecated table-form setuptools license metadata on all platforms; it was replaced
+  with SPDX `MIT` plus `license-files`. A second run confirmed macOS and exposed two platform-specific CI assumptions:
+  Ubuntu lacked the host `libEGL.so.1` runtime and Windows cannot validate POSIX execute bits. The final workflow
+  provisions Ubuntu's `libegl1`, scopes execute-bit assertions to POSIX, preserves the expected nonzero repair gate in
+  PowerShell, and prints installer logs after failures.
+- Final run `32647577404` succeeded on every native runner. Ubuntu passed 253 tests in 11.11s, macOS passed 253 in
+  10.77s, and Windows passed 252 with one intentional POSIX-only skip in 11.97s. Every runner completed first install,
+  healthy repeat, dependency removal, repair-required rejection, explicit repair, `pip check`, isolated installed
+  TXT/XLSX/CSV/PNG/67-SVG smoke, and the full test suite.
+- M6 is complete. The installer still does not elevate privileges or silently install host software; Linux users need
+  a distribution package providing `libEGL.so.1` before the PySide6 GUI can run.

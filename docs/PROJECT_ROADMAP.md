@@ -1,11 +1,11 @@
 # PlotApp 当前执行路线图
 
 - 更新日期：`2026-08-23`
-- 总体状态：`M3-M4_COMPLETE / M5-M6_MACOS_IMPLEMENTED / WINDOWS_LINUX_PENDING`
+- 总体状态：`M3-M4_COMPLETE / M5_SIZE_VALIDATION_PENDING / M6_COMPLETE / M7_PLANNED`
 - Model Handoff：`paused`，文件保留；本路线图和 `STATUS.md` 负责普通协作期间的进度记录。
-- 当前自动化基线：本机 `238 passed` 且 warnings-as-error；clean CPython 3.12.14 Essentials-only
-  installed-wheel `238 passed`，`pip check`、Qt Core/Gui/Widgets/Svg 和 offscreen 启动通过。M2 真实仪器文件验证仍
-  延期到发布前。
+- 当前自动化基线：本机 `253 passed`；原生 CI Ubuntu/macOS 各 `253 passed`，Windows
+  `252 passed, 1 skipped`。clean CPython 3.12 Essentials-only 的 `pip check`、Qt、I/O、绘图、导出和
+  67 SVG 验证通过。M2 真实仪器文件验证仍延期到发布前。
 
 ## 总目标
 
@@ -98,27 +98,28 @@ CPython 3.12.14 installed-wheel `203 passed, 6 warnings in 51.14s`，wheel 四�
 验收：固定大数据集上无明显性能回退；耗时任务不长期阻塞主线程；关闭窗口能安全取消任务；完整功能
 和 GUI 冒烟测试通过。每项必须给出前后耗时、峰值内存或帧延迟，不能只写“更流畅”。
 
-## 阶段 F — M5 依赖和安装体积 — CROSS-PLATFORM VALIDATION PENDING
+## 阶段 F — M5 依赖和安装体积 — PENDING_VALIDATION
 
 目标：在不改变功能的情况下减少不必要依赖和安装资源。
 
 工作：macOS 已完成 `PySide6-Essentials` 迁移、通用锁更新、依赖用途、wheel 资源、环境落盘和启动内存
 验证；环境从 1,487,064 降至 607,412 KiB（-59.15%），本机/Essentials wheel 均为 238 passed。
-Windows/Linux 验证并入 M6 对应安装矩阵。不得为了体积擅自替换 Pandas/SciPy/Matplotlib。
+Windows/Linux Essentials 功能验证已随 M6 原生矩阵通过；两系统完整 PySide6 对照体积尚未采集，转入
+M7 发布度量，不影响已验证的功能兼容。不得为了体积擅自替换 Pandas/SciPy/Matplotlib。
 
 验收：三系统完整功能通过并给出前后体积；若 Essentials 不兼容，记录证据后保留完整 PySide6。
 
-## 阶段 G — M6 三系统一键安装 — MACOS IMPLEMENTED / WINDOWS-LINUX PENDING
+## 阶段 G — M6 三系统一键安装 — COMPLETE
 
 目标：不制作 `.app`、MSI、DMG、AppImage 或独立 exe；用户运行系统对应脚本即可安装和启动。
 
 工作：实现标准库共享安装核心及 Windows `.bat`、macOS `.command`、Linux `.sh`；创建项目内 `.venv`；
 支持已有 Python、受控 Python/uv、dry-run、幂等、repair、代理/离线提示、日志和启动器。
 
-当前结果：上述核心和三个入口均已实现。macOS 在中文空格路径完成首次安装、健康重复、缺包识别、无
-repair 非零失败、显式 repair、哈希锁、`pip check` 和安装后 I/O/绘图/资源冒烟；完整套件 251 passed。
-三系统原生 CI 工作流已在本地完成，最终本机套件 253 passed；尚未提交/推送，因此 Windows/Linux 仍无
-原生运行结果。
+完成结果：上述核心和三个入口均已实现。最终 GitHub 原生矩阵运行 `32647577404` 全绿：Ubuntu/macOS
+各 253 项，Windows 252 项加一个 POSIX 可执行位跳过。三系统均完成首次安装、健康重复、缺包识别、
+无 repair 非零失败、显式 repair、哈希锁、`pip check` 和安装后 I/O/绘图/资源冒烟。Linux CI 明确安装
+宿主 `libegl1`；项目安装器保持不提权、不静默安装系统软件。
 
 验收：三系统干净环境首次/重复/修复安装；中文和空格路径；失败非零退出码；安装后 TXT/XLSX 导入、
 绘图及 PNG/CSV/XLSX 导出冒烟测试。不得默认请求管理员权限或修改系统 Python。
@@ -127,8 +128,8 @@ repair 非零失败、显式 repair、哈希锁、`pip check` 和安装后 I/O/�
 
 目标：形成可交付版本、CI、用户说明和风险清单。
 
-工作：Windows/macOS/Linux CI；重建锁文件；普通用户安装复核；补充真实仪器 TXT/DAT/VSM/XLS/XLSX
-样本验证；修订 README 中平台、磁盘、错误排查、版本和联系方式。
+工作：重建锁文件；普通用户安装复核；补充真实仪器 TXT/DAT/VSM/XLS/XLSX 样本验证；修订 README
+中的平台前置条件、磁盘、错误排查、版本和联系方式；补充 Windows/Linux 对照体积。
 
 验收：三系统 CI 和安装矩阵全绿；真实样本列名/列数/值正确；锁文件可重建；限制与磁盘需求准确。
 若发布前仍没有真实仪器文件，则状态必须保留 `PENDING_USER_VALIDATION`，不能宣称完全发布验收。
@@ -136,11 +137,11 @@ repair 非零失败、显式 repair、哈希锁、`pip check` 和安装后 I/O/�
 ## 当前风险与决策点
 
 - M2 自动化 I/O 已接受，但真实仪器文件尚未验证。
-- Windows/Linux 尚无本轮实机 installed-wheel 和 GUI 证据。
+- 三系统 CI 已通过；真实普通用户桌面会话仍需发布前复核，Linux 需预装提供 `libEGL.so.1` 的系统包。
 - Python 3.12 已验证；是否扩展 3.11/3.13 留到 M7，不在当前阶段改变。
-- 是否保留 `.xls`、安装器是否允许自动下载 uv/Python、Linux 是否生成 `.desktop`，在 M5/M6 开始前决定。
+- `.xls` 支持保留；安装器不自动下载 uv/Python；Linux 当前不生成 `.desktop`，如需改变须在 M7 单独决策。
 - 当前历史内存基线很高，但必须先完成 M3.2 数值边界，再修改 history，避免两个根不变量混改。
 
 ## 唯一下一步
 
-取得提交/推送授权后运行三系统原生安装矩阵；之后进入 M7 真实样本和最终发布说明。
+制定 M7.1 发布说明、锁文件可重建性和普通用户安装复核计划；真实仪器文件继续等待用户样本。
