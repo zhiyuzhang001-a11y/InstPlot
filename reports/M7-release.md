@@ -46,7 +46,7 @@
   `260 passed`, Windows `259 passed, 1 skipped`. Evidence:
   `https://github.com/zhiyuzhang001-a11y/InstPlot/actions/runs/32678530521`.
 
-## 2026-08-24 — zero-Python prerequisite and compatibility extension — IN PROGRESS
+## 2026-08-24 — zero-Python prerequisite and compatibility extension — COMPLETE
 
 - Public Windows, macOS and Linux entrypoints now execute through uv instead of requiring a preinstalled Python.
   When uv is absent, a pinned uv 0.12.5 installer is downloaded, matched against a repository-pinned SHA-256 and
@@ -56,5 +56,8 @@
 - The macOS entrypoint completed a forced project-local uv bootstrap and healthy install. A separate clean uv-managed
   CPython 3.10.21 environment passed hashed dependency installation, project wheel installation, `pip check`, isolated
   TXT/XLSX/CSV/PNG/67-SVG smoke and the complete `271 passed` suite.
-- Remaining gate: native Windows/macOS/Linux forced-bootstrap jobs and Ubuntu compatibility jobs for all five supported
-  Python minor versions. Real instrument samples remain a separate user-supplied validation item.
+- GitHub Actions run `32679629432` passed all nine jobs. Windows, macOS and Ubuntu forced the verified project-local uv
+  bootstrap, each downloaded managed CPython 3.14.7, then passed first install, healthy repeat, repair, footprint, smoke
+  and full regression. Ubuntu/macOS each passed 271 tests; Windows passed 270 with one POSIX-only skip.
+- Dedicated Ubuntu jobs on CPython 3.10, 3.11, 3.12, 3.13 and 3.14 each passed hashed installation, `pip check`, smoke
+  and all 271 tests. Real instrument samples remain the only user-supplied validation item.

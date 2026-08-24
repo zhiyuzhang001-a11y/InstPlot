@@ -1,6 +1,6 @@
 # M6 三系统一键安装合同
 
-- 状态：`M6 COMPLETE / 2026-08-24 ZERO-PYTHON AMENDMENT IN_PROGRESS`
+- 状态：`M6 COMPLETE / 2026-08-24 ZERO-PYTHON AMENDMENT COMPLETE`
 - 目标：不制作 App/EXE/DMG/MSI/AppImage；用户运行系统对应入口，在项目内创建 `.venv`、安装、验证并
   启动 InstPlot，不修改系统 Python、不请求管理员权限。
 

@@ -65,7 +65,7 @@
   unique-file allocation. A dedicated collision regression increased the suite to 254 tests; the current native
   matrix passes 254 tests on Ubuntu/macOS and 253 plus one POSIX-only skip on Windows.
 
-## Zero-Python prerequisite amendment — 2026-08-24 — IN PROGRESS
+## Zero-Python prerequisite amendment — 2026-08-24 — COMPLETE
 
 - User-facing entrypoints no longer invoke a preinstalled Python. They prefer an existing uv, otherwise download the
   pinned uv 0.12.5 installer, verify its pinned SHA-256 and install uv under project-local `.installer/uv` without PATH
@@ -74,4 +74,6 @@
   `>=3.10,<3.15` boundary. The universal hash lock is regenerated from Python 3.10 and contains version markers for
   dependencies whose supported releases differ by Python minor version.
 - Local macOS bootstrap downloaded and verified the official installer, created uv 0.12.5 at the expected project-local
-  path and located a compatible interpreter. Cross-platform bootstrap and five-version compatibility CI remain pending.
+  path and located a compatible interpreter. GitHub Actions run `32679629432` then forced the same bootstrap on
+  Windows, macOS and Ubuntu, downloaded managed CPython 3.14.7 on each, and passed first/repeat/repair workflows.
+- The compatibility jobs passed the complete 271-test suite independently on CPython 3.10, 3.11, 3.12, 3.13 and 3.14.

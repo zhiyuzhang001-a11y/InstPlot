@@ -1,11 +1,10 @@
 # M7 发布验收计划
 
-- 状态：`M7.1-M7.2 COMPLETE / M7.3 DESKTOP COMPLETE / REAL SAMPLES PENDING_USER_VALIDATION`
+- 状态：`M7.1-M7.2 COMPLETE / M7.3 DESKTOP COMPLETE / M7.4 COMPLETE / REAL SAMPLES PENDING_USER_VALIDATION`
 - 版本：`1.0.0`
 - 发布形态：源代码目录加三系统入口；不制作 App、DMG、MSI、EXE 或 AppImage。
 - 运行时：CPython 3.10–3.14；由 M7.4 扩展并验证，不承诺当前 PySide6 不支持的 3.15。
-- M7.4 扩展：按用户要求改为 CPython 3.10–3.14，并增加无需预装 Python/uv 的安全自举入口；完成前
-  状态为 `IN_PROGRESS`。
+- M7.4 扩展：按用户要求改为 CPython 3.10–3.14，并增加无需预装 Python/uv 的安全自举入口；已完成。
 
 ## M7.1 自动化发布门禁
 
@@ -41,4 +40,5 @@
 
 M7.1-M7.2 及桌面启动修复已由 GitHub Actions run `32678530521` 验收通过，详细证据集中记录到
 `reports/M7-release.md`。M7.3 的桌面启动已完成，在收到真实样本前仍保持待验证；`STATUS.md` 和
-`docs/PROJECT_ROADMAP.md` 保留唯一下一动作。
+`docs/PROJECT_ROADMAP.md` 保留唯一下一动作。M7.4 由 GitHub Actions run `32679629432` 验收通过：
+三系统强制自举 uv/托管 CPython，五个受支持 Python 次版本的完整测试全部通过。

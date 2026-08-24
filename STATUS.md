@@ -1,11 +1,12 @@
 # Current project status
 
 - Date: `2026-08-24`
-- Project state: `M3-M6 COMPLETE / M7.4 ZERO-PYTHON INSTALL IN_PROGRESS / REAL SAMPLES PENDING_USER_VALIDATION`
+- Project state: `M3-M7.4 COMPLETE / REAL SAMPLES PENDING_USER_VALIDATION`
 - Active plan: `docs/M7_RELEASE_PLAN.md`
 - Model Handoff Protocol: `paused`；文件保留，`MODEL_HANDOFF.md` 当前不参与普通工作路由。
-- Last verified baseline: local current Python and clean managed CPython 3.10.21 each `271 passed`；GitHub Actions run `32678530521` 中 Ubuntu/macOS 各
-  `260 passed`，Windows `259 passed, 1 skipped`。三系统 clean CPython 3.12 Essentials 首次/重复/repair、`pip check`、
+- Last verified baseline: local current Python and clean managed CPython 3.10.21 each `271 passed`；GitHub Actions
+  run `32679629432` 中 Python 3.10–3.14 各 `271 passed`，Ubuntu/macOS 各 `271 passed`，Windows
+  `270 passed, 1 skipped`。三系统固定 uv 自举、托管 CPython 3.14.7、首次/重复/repair、`pip check`、
   TXT/XLSX/CSV/PNG/67 SVG 和 offscreen 绘图均通过。
 
 ## Overall goal
@@ -28,9 +29,8 @@ macOS、Linux 对应的一键隔离环境安装和启动。
 - M4 GUI/性能、M5 Essentials 功能兼容与三系统体积证据、M6 三系统安装矩阵均已完成。
 - M7 自动发布门禁已完成：发布文档、真实仓库元数据、标准库验证器、固定 `uv 0.12.5` 字节级锁
   重建和三系统 CI 均通过；macOS 正式启动器的原生桌面复核也已完成，阶段只等待真实仪器样本。
-- M7.4 已进入实施：支持范围改为 CPython 3.10–3.14；三入口可把固定且经 SHA-256 校验的 uv 安装到
-  项目内，并由 uv 在需要时提供托管 Python。macOS 实际自举、3.10 干净环境、哈希锁重建和 271 项
-  回归已通过；跨版本/跨系统矩阵等待最终验证。
+- M7.4 已完成：支持范围为 CPython 3.10–3.14；三入口可把固定且经 SHA-256 校验的 uv 安装到项目内，
+  并由 uv 在需要时提供托管 Python。macOS 本地、三系统 CI 自举、五版本兼容、哈希锁和 271 项回归均通过。
 
 ## Current unresolved issues
 
@@ -55,4 +55,4 @@ macOS、Linux 对应的一键隔离环境安装和启动。
 
 ## Next action
 
-`完成 M7.4 的 Python 3.10–3.14 兼容矩阵及三系统零 Python 前置自举 CI。`
+`取得脱敏真实仪器 TXT/DAT/XLS/XLSX 样本并执行列名、列数和数值验证。`
