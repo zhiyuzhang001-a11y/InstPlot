@@ -61,3 +61,11 @@
   and full regression. Ubuntu/macOS each passed 271 tests; Windows passed 270 with one POSIX-only skip.
 - Dedicated Ubuntu jobs on CPython 3.10, 3.11, 3.12, 3.13 and 3.14 each passed hashed installation, `pip check`, smoke
   and all 271 tests. Real instrument samples remain the only user-supplied validation item.
+
+## 2026-08-24 — Linux EGL preflight — IN PROGRESS
+
+- The Linux entrypoint now checks the dynamic linker cache and standard multi-architecture library directories for
+  `libEGL.so.1` before downloading uv, Python or project dependencies.
+- If missing, it reads distribution identifiers without sourcing `/etc/os-release`, prints a package-manager-specific
+  command for Debian/Ubuntu, Fedora/RHEL derivatives, Arch derivatives or openSUSE, and exits without invoking sudo.
+- Local shell syntax, the missing-library path and the complete 272-test suite pass. Native Linux CI remains pending.

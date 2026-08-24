@@ -147,8 +147,8 @@
   `windows-latest`、`macos-latest` 和 Ubuntu `ubuntu-latest`；其他版本应以 Qt for Python 当前支持范围为准。
 - **内存**：至少 2 GB；处理大型文件时建议 4 GB 或更多。
 - **磁盘**：项目所在磁盘至少 1 GB 可用空间；依赖安装在项目内 `.venv`。
-- **Linux 图形库**：系统必须提供 `libEGL.so.1`。Ubuntu/Debian 可在安装 InstPlot 前由管理员运行
-  `sudo apt-get install libegl1`；其他发行版请安装提供同名库的系统包。InstPlot 安装器不会自行提权。
+- **Linux 图形库**：系统必须提供 `libEGL.so.1`。Linux 入口会在下载 Python 依赖前自动检测；缺少时
+  根据 Ubuntu/Debian、Fedora/RHEL、Arch 或 openSUSE 显示对应安装命令并安全退出。安装器不会自行提权。
 
 ---
 
@@ -248,7 +248,8 @@ python -m pip install --no-deps .
 
 - 安装器报告 `repair-needed`：重新运行系统对应入口并增加 `--repair`。安装器不会在未授权时重装环境。
 - 安装器报告 `conflict`：不要删除或覆盖提示的 `.venv`/启动器；先备份用户修改，再人工处理冲突。
-- Linux 报告找不到 `libEGL.so.1`：先安装发行版提供的 EGL 运行库；Ubuntu/Debian 包名通常为 `libegl1`。
+- Linux 报告找不到 `libEGL.so.1`：复制入口显示的发行版安装命令，完成后重新运行 `./install_linux.sh`。
+  Ubuntu/Debian 使用 `libegl1`，Fedora/RHEL 使用 `mesa-libEGL`，Arch 使用 `libglvnd`。
 - uv/Python 下载失败：确认可以通过 HTTPS 访问 `astral.sh`、GitHub 和 PyPI 后重试；不需要先手动安装
   Python。若使用离线环境，需要提前准备兼容 CPython 3.10–3.14、uv 缓存和全部锁定依赖。
 - 仍然失败：保留 `.install-logs` 中最新安装日志和上方“诊断日志”对应的平台日志，在 GitHub Issue

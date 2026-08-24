@@ -24,7 +24,7 @@ def test_platform_install_entrypoints_are_local_and_non_privileged():
         assert "scripts/install.py" in content or "scripts\\install.py" in content
         assert "--apply" in content
         assert "run_instplot" in content
-        assert "sudo" not in content.lower()
+        assert "\nsudo " not in content.lower()
         assert "curl" not in content.lower()
         if name == "install_windows.bat":
             assert "powershell -NoProfile -ExecutionPolicy Bypass -File" in content
@@ -32,6 +32,20 @@ def test_platform_install_entrypoints_are_local_and_non_privileged():
             assert "-EncodedCommand" not in content
         else:
             assert "powershell" not in content.lower()
+
+
+def test_linux_entrypoint_detects_egl_and_prints_distribution_specific_help():
+    content = (ROOT / "install_linux.sh").read_text(encoding="utf-8")
+
+    assert "libEGL.so.1" in content
+    assert "ldconfig -p" in content
+    assert "/etc/os-release" in content
+    assert "sudo apt-get install -y libegl1" in content
+    assert "sudo dnf install mesa-libEGL" in content
+    assert "sudo pacman -S libglvnd" in content
+    assert "sudo zypper install Mesa-libEGL1" in content
+    assert content.index("libEGL.so.1") < content.index("bootstrap_uv.sh")
+    assert "eval " not in content
 
 
 @pytest.mark.skipif(os.name == "nt", reason="Windows filesystems do not expose POSIX execute bits")
