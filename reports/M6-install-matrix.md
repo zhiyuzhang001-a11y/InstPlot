@@ -64,3 +64,14 @@
   microsecond timestamp. Log creation now retains the timestamp prefix while using the operating system's atomic
   unique-file allocation. A dedicated collision regression increased the suite to 254 tests; the current native
   matrix passes 254 tests on Ubuntu/macOS and 253 plus one POSIX-only skip on Windows.
+
+## Zero-Python prerequisite amendment — 2026-08-24 — IN PROGRESS
+
+- User-facing entrypoints no longer invoke a preinstalled Python. They prefer an existing uv, otherwise download the
+  pinned uv 0.12.5 installer, verify its pinned SHA-256 and install uv under project-local `.installer/uv` without PATH
+  or shell-profile changes. uv may then download a managed compatible CPython when the host has none.
+- Project and installer metadata now accept CPython 3.10–3.14, matching PySide6 Essentials 6.11.2's published
+  `>=3.10,<3.15` boundary. The universal hash lock is regenerated from Python 3.10 and contains version markers for
+  dependencies whose supported releases differ by Python minor version.
+- Local macOS bootstrap downloaded and verified the official installer, created uv 0.12.5 at the expected project-local
+  path and located a compatible interpreter. Cross-platform bootstrap and five-version compatibility CI remain pending.

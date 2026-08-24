@@ -3,17 +3,17 @@ set -u
 
 SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 INSTALLER="$SCRIPT_DIR/scripts/install.py"
+LOCAL_UV="$SCRIPT_DIR/.installer/uv/uv"
+PYTHON_REQUEST=">=3.10,<3.15"
 
-if command -v python3.12 >/dev/null 2>&1; then
-    python3.12 "$INSTALLER" --apply "$@"
-elif command -v python3 >/dev/null 2>&1; then
-    python3 "$INSTALLER" --apply "$@"
-elif command -v uv >/dev/null 2>&1; then
-    uv run --no-project --python 3.12 "$INSTALLER" --apply "$@"
+if [ "${INSTPLOT_FORCE_UV_BOOTSTRAP:-0}" != "1" ] && command -v uv >/dev/null 2>&1; then
+    UV=$(command -v uv)
 else
-    printf '%s\n' "Python was not found. Install Python 3.12 from python.org or install uv, then retry."
-    exit 1
+    "$SCRIPT_DIR/scripts/bootstrap_uv.sh"
+    UV="$LOCAL_UV"
 fi
+
+"$UV" run --no-project --python "$PYTHON_REQUEST" "$INSTALLER" --apply "$@"
 
 status=$?
 if [ "$status" -ne 0 ]; then

@@ -141,7 +141,8 @@
 
 ## 🖥️ 系统要求
 
-- **Python**：仅支持 CPython 3.12；3.11 和 3.13 尚未进入发布矩阵。
+- **Python**：程序支持 CPython 3.10–3.14；一键安装无需预装 Python。当前 PySide6 的上限是
+  Python `<3.15`，因此尚不承诺 Python 3.15。
 - **操作系统**：Windows、macOS 或带桌面环境的 Linux。自动化发布矩阵使用 GitHub 当前的
   `windows-latest`、`macos-latest` 和 Ubuntu `ubuntu-latest`；其他版本应以 Qt for Python 当前支持范围为准。
 - **内存**：至少 2 GB；处理大型文件时建议 4 GB 或更多。
@@ -153,19 +154,22 @@
 
 ## ⚡ 一键安装与启动
 
-下载或解压项目后，根据系统运行对应入口。安装器只创建项目内 `.venv`，不会修改系统 Python，也不会
-自动下载 Python、uv 或系统软件。Linux 的图形库前置条件需由用户或管理员提前完成。
+下载或解压项目后，在项目目录的终端运行一个系统入口即可。无需预装 Python 或 uv：入口优先使用已有
+uv；若没有，则从官方固定地址下载 uv 0.12.5 安装器，核对仓库内固定的 SHA-256 后执行，并只安装到
+项目的 `.installer/uv`。uv 会选取已有的兼容 CPython 3.10–3.14；如果电脑上没有，则自动取得托管的
+兼容 CPython。项目环境仍只创建在 `.venv`，不会修改系统 Python 或 shell 配置。
 
-- Windows：双击 `install_windows.bat`
-- macOS：双击 `install_macos.command`；若下载后没有执行权限，先运行
-  `chmod +x install_macos.command`
-- Linux：运行 `./install_linux.sh`；必要时先运行 `chmod +x install_linux.sh`
+- Windows CMD/PowerShell：`install_windows.bat`
+- macOS：`./install_macos.command`；若下载后没有执行权限，先运行 `chmod +x install_macos.command`
+- Linux：`./install_linux.sh`；必要时先运行 `chmod +x install_linux.sh`
 
 安装成功后会自动启动。以后可直接运行生成的 `run_instplot.bat`、`run_instplot.command` 或
 `run_instplot.sh`。修复已有环境时，在终端运行对应安装入口并增加 `--repair`。
 
-安装器需要 Python 3.12 或现有的 uv。如果两者都不存在，它会停止并显示安装指引，不会自动执行远程
-脚本。安装日志位于项目的 `.install-logs`。仅检查计划而不写入时可运行：
+首次安装需要联网下载 uv、CPython（本机没有兼容版本时）及锁定依赖。uv 安装脚本固定为
+`https://astral.sh/uv/0.12.5/` 下的系统版本，并在执行前验证 SHA-256；下载或校验失败会直接停止。
+Linux 的 `libEGL.so.1` 仍是宿主系统前置条件，安装器不会提权或安装系统软件。安装日志位于项目的
+`.install-logs`。已有兼容 Python 时可仅检查共享安装计划而不写入：
 
 ```bash
 python scripts/install.py --json
@@ -180,13 +184,13 @@ python scripts/install.py --json
 git clone https://github.com/zhiyuzhang001-a11y/InstPlot.git
 cd InstPlot
 
-# macOS / Linux：创建隔离环境（避免依赖当前系统 Python）
-python3.12 -m venv .venv
+# macOS / Linux：使用任一 CPython 3.10–3.14 创建隔离环境
+python3 -m venv .venv
 
 source .venv/bin/activate
 
 # Windows PowerShell：创建并激活隔离环境
-# py -3.12 -m venv .venv
+# py -3 -m venv .venv
 # .venv\Scripts\Activate.ps1
 
 # 按 `requirements.lock` 的固定版本安装运行依赖，再安装本项目
@@ -195,11 +199,11 @@ python -m pip install -r requirements.txt
 python -m pip install --no-deps .
 ```
 
-`requirements.lock` 是以 Python 3.12 生成、包含哈希的通用锁定文件。使用经过发布验证的 uv 版本
-重新生成时运行：
+`requirements.lock` 从最低支持版本 Python 3.10 生成，包含覆盖 3.10–3.14 的环境标记和哈希。使用
+经过发布验证的 uv 版本重新生成时运行：
 
 ```bash
-uv pip compile pyproject.toml --python-version 3.12 --universal --generate-hashes --output-file requirements.lock
+uv pip compile pyproject.toml --python-version 3.10 --universal --generate-hashes --output-file requirements.lock
 ```
 
 提交锁文件前必须运行 `python scripts/verify_release.py --check-lock`，并在 Windows、macOS、Linux
@@ -245,7 +249,8 @@ python -m pip install --no-deps .
 - 安装器报告 `repair-needed`：重新运行系统对应入口并增加 `--repair`。安装器不会在未授权时重装环境。
 - 安装器报告 `conflict`：不要删除或覆盖提示的 `.venv`/启动器；先备份用户修改，再人工处理冲突。
 - Linux 报告找不到 `libEGL.so.1`：先安装发行版提供的 EGL 运行库；Ubuntu/Debian 包名通常为 `libegl1`。
-- 找不到 Python：安装 CPython 3.12 或 uv 后重试；不要使用项目未验证的 Python 3.11/3.13。
+- uv/Python 下载失败：确认可以通过 HTTPS 访问 `astral.sh`、GitHub 和 PyPI 后重试；不需要先手动安装
+  Python。若使用离线环境，需要提前准备兼容 CPython 3.10–3.14、uv 缓存和全部锁定依赖。
 - 仍然失败：保留 `.install-logs` 中最新安装日志和上方“诊断日志”对应的平台日志，在 GitHub Issue
   中附上系统版本、复现步骤和错误文本；不要上传包含敏感数据的原始实验文件。
 

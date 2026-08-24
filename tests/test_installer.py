@@ -4,7 +4,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from scripts.install import InstallError, _open_log, install, launcher_content
+from scripts.install import InstallError, _open_log, _probe_python, install, launcher_content
 
 
 def _project(tmp_path):
@@ -132,14 +132,23 @@ def test_launcher_templates_are_relative_to_their_own_location(platform_name, la
     assert launcher_name.endswith((".bat", ".command", ".sh"))
 
 
-def test_wrong_python_version_is_rejected(tmp_path):
+@pytest.mark.parametrize("version", ["3.10", "3.11", "3.12", "3.13", "3.14"])
+def test_all_supported_python_versions_are_accepted(tmp_path, version):
+    def probe(command, **_kwargs):
+        return SimpleNamespace(returncode=0, stdout=f"{version}\n", stderr="")
+
+    assert _probe_python(["python"], tmp_path, probe)
+
+
+@pytest.mark.parametrize("version", ["3.9", "3.15", "4.0"])
+def test_unsupported_python_version_is_rejected(tmp_path, version):
     root = _project(tmp_path)
     runner = FakeRunner(root)
 
     def wrong_version(command, **kwargs):
         result = runner(command, **kwargs)
         if command[-2:] == ["-c", "import sys; print('.'.join(map(str, sys.version_info[:2])))"]:
-            result.stdout = "3.13\n"
+            result.stdout = f"{version}\n"
         return result
 
     with pytest.raises(InstallError) as raised:

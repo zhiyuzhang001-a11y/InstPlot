@@ -23,6 +23,9 @@ REQUIRED_PROJECT_FILES = (
     Path("scripts/verify_install.py"),
 )
 VERSION_PROBE = "import sys; print('.'.join(map(str, sys.version_info[:2])))"
+MINIMUM_PYTHON = (3, 10)
+MAXIMUM_PYTHON = (3, 15)
+PYTHON_REQUEST = ">=3.10,<3.15"
 HEALTH_PROBE = (
     "import importlib.metadata as m; "
     "from PySide6 import QtCore, QtGui, QtWidgets, QtSvg; "
@@ -109,22 +112,39 @@ def _call(runner, command, root):
 
 def _probe_python(command, root, runner):
     result = _call(runner, list(command) + ["-c", VERSION_PROBE], root)
-    return result.returncode == 0 and result.stdout.strip() == "3.12"
+    if result.returncode != 0:
+        return False
+    try:
+        version = tuple(int(part) for part in result.stdout.strip().split("."))
+    except ValueError:
+        return False
+    return MINIMUM_PYTHON <= version < MAXIMUM_PYTHON
 
 
 def _select_python(root, platform_name, runner, explicit=None):
     if explicit:
         command = [str(part) for part in explicit]
         if not _probe_python(command, root, runner):
-            raise InstallError("unsupported_python", f"Python command is not CPython 3.12: {command}")
+            raise InstallError(
+                "unsupported_python",
+                f"Python command does not satisfy {PYTHON_REQUEST}: {command}",
+            )
         return command
 
     candidates = []
-    if sys.version_info[:2] == (3, 12):
+    if MINIMUM_PYTHON <= sys.version_info[:2] < MAXIMUM_PYTHON:
         candidates.append([sys.executable])
     if _platform_family(platform_name) == "windows" and shutil.which("py"):
-        candidates.append(["py", "-3.12"])
-    for name in ("python3.12", "python3", "python"):
+        candidates.append(["py", "-3"])
+    for name in (
+        "python3.14",
+        "python3.13",
+        "python3.12",
+        "python3.11",
+        "python3.10",
+        "python3",
+        "python",
+    ):
         executable = shutil.which(name)
         if executable:
             candidates.append([executable])
@@ -134,14 +154,14 @@ def _select_python(root, platform_name, runner, explicit=None):
 
     uv = shutil.which("uv")
     if uv:
-        located = _call(runner, [uv, "python", "find", "3.12"], root)
+        located = _call(runner, [uv, "python", "find", PYTHON_REQUEST], root)
         if located.returncode == 0 and located.stdout.strip():
             command = [located.stdout.strip().splitlines()[-1]]
             if _probe_python(command, root, runner):
                 return command
     raise InstallError(
         "python_not_found",
-        "CPython 3.12 was not found. Install Python 3.12 or uv, then retry.",
+        f"No CPython satisfying {PYTHON_REQUEST} was found. Run a system installer entrypoint so uv can provide it.",
     )
 
 
@@ -157,7 +177,15 @@ def _environment_state(root, platform_name, runner):
     if not python.is_file():
         return "repair-needed"
     version = _call(runner, [python, "-I", "-c", VERSION_PROBE], root)
-    if version.returncode != 0 or version.stdout.strip() != "3.12":
+    if version.returncode != 0:
+        return "repair-needed"
+    try:
+        environment_version = tuple(
+            int(part) for part in version.stdout.strip().split(".")
+        )
+    except ValueError:
+        return "repair-needed"
+    if not MINIMUM_PYTHON <= environment_version < MAXIMUM_PYTHON:
         return "repair-needed"
     dependency_health = _call(runner, [python, "-m", "pip", "check"], root)
     if dependency_health.returncode != 0:

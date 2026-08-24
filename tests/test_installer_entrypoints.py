@@ -26,7 +26,12 @@ def test_platform_install_entrypoints_are_local_and_non_privileged():
         assert "run_instplot" in content
         assert "sudo" not in content.lower()
         assert "curl" not in content.lower()
-        assert "powershell" not in content.lower()
+        if name == "install_windows.bat":
+            assert "powershell -NoProfile -ExecutionPolicy Bypass -File" in content
+            assert "bootstrap_uv.ps1" in content
+            assert "-EncodedCommand" not in content
+        else:
+            assert "powershell" not in content.lower()
 
 
 @pytest.mark.skipif(os.name == "nt", reason="Windows filesystems do not expose POSIX execute bits")

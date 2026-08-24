@@ -1,6 +1,10 @@
 import os
 from pathlib import Path
 from types import SimpleNamespace
+try:
+    import tomllib
+except ModuleNotFoundError:
+    import tomli as tomllib
 
 import scripts.verify_release as release
 import InstPlot
@@ -12,6 +16,12 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def test_release_documentation_has_no_placeholders_and_matches_metadata():
     assert validate_release_docs(ROOT) == []
+
+
+def test_project_supports_current_cpython_range():
+    metadata = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
+
+    assert metadata["project"]["requires-python"] == ">=3.10,<3.15"
 
 
 def test_environment_size_counts_regular_files_without_following_symlinks(tmp_path):
@@ -39,6 +49,29 @@ def test_release_workflow_checks_lock_and_cross_platform_footprint():
     assert workflow.index("--measure-full-pyside") < workflow.index(
         "-m pip install pytest==8.4.2"
     )
+
+
+def test_lock_check_resolves_relative_uv_before_changing_directory(tmp_path, monkeypatch):
+    root = tmp_path / "project"
+    root.mkdir()
+    (root / "pyproject.toml").write_text("[project]\nname = 'sample'\n", encoding="utf-8")
+    (root / "requirements.lock").write_text("locked\n", encoding="utf-8")
+    uv = root / ".installer" / "uv" / "uv"
+    uv.parent.mkdir(parents=True)
+    uv.touch()
+    commands = []
+
+    def fake_run(command, **kwargs):
+        commands.append(command)
+        (Path(kwargs["cwd"]) / "requirements.lock").write_text("locked\n", encoding="utf-8")
+        return SimpleNamespace(returncode=0, stdout="", stderr="")
+
+    monkeypatch.chdir(root)
+    monkeypatch.setattr(release.subprocess, "run", fake_run)
+
+    release.check_lock(root, ".installer/uv/uv")
+
+    assert Path(commands[0][0]).is_absolute()
 
 
 def test_full_pyside_measurement_uses_disposable_environment(tmp_path, monkeypatch):

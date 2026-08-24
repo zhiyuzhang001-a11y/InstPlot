@@ -45,3 +45,16 @@
 - Final GitHub Actions run `32678530521` passed the updated release gate and full native matrix: Ubuntu/macOS
   `260 passed`, Windows `259 passed, 1 skipped`. Evidence:
   `https://github.com/zhiyuzhang001-a11y/InstPlot/actions/runs/32678530521`.
+
+## 2026-08-24 — zero-Python prerequisite and compatibility extension — IN PROGRESS
+
+- Public Windows, macOS and Linux entrypoints now execute through uv instead of requiring a preinstalled Python.
+  When uv is absent, a pinned uv 0.12.5 installer is downloaded, matched against a repository-pinned SHA-256 and
+  installed under `.installer/uv` without changing PATH or a shell profile. uv may supply a managed interpreter.
+- Project metadata, installer selection and environment health accept CPython 3.10–3.14. The universal hash lock is
+  regenerated from Python 3.10 with per-version dependency markers; byte-for-byte regeneration passes.
+- The macOS entrypoint completed a forced project-local uv bootstrap and healthy install. A separate clean uv-managed
+  CPython 3.10.21 environment passed hashed dependency installation, project wheel installation, `pip check`, isolated
+  TXT/XLSX/CSV/PNG/67-SVG smoke and the complete `271 passed` suite.
+- Remaining gate: native Windows/macOS/Linux forced-bootstrap jobs and Ubuntu compatibility jobs for all five supported
+  Python minor versions. Real instrument samples remain a separate user-supplied validation item.

@@ -1,6 +1,6 @@
 # M6 三系统一键安装合同
 
-- 状态：`M6.1 COMPLETE / MACOS IMPLEMENTED / WINDOWS-LINUX NATIVE VALIDATION PENDING`
+- 状态：`M6 COMPLETE / 2026-08-24 ZERO-PYTHON AMENDMENT IN_PROGRESS`
 - 目标：不制作 App/EXE/DMG/MSI/AppImage；用户运行系统对应入口，在项目内创建 `.venv`、安装、验证并
   启动 InstPlot，不修改系统 Python、不请求管理员权限。
 
@@ -11,21 +11,23 @@
    符号链接、非预期文件类型及用户修改均报告 `conflict`，不得覆盖或删除。
 3. 状态固定为 `missing / healthy / repair-needed / conflict`。`repair-needed` 只有显式 `--repair --apply`
    才重新安装；`healthy` 重复运行不得重建环境。
-4. 只接受 CPython 3.12；命令全部以参数数组执行，不拼接 shell 字符串，中文、空格和 shell 特殊字符
+4. 接受 CPython 3.10–3.14；命令全部以参数数组执行，不拼接 shell 字符串，中文、空格和 shell 特殊字符
    路径不得改变目标。
 5. 安装顺序固定为：创建项目内 `.venv` → 哈希锁依赖 → `--no-deps` 安装项目 → `pip check` →
    `verify_install.py`。任一步失败返回非零，不发布“健康”状态。
 6. apply 日志只写项目 `.install-logs/`，不记录完整环境变量或用户数据。失败输出日志位置和安全的重试
-   命令；不静默下载系统软件。
+   命令；不静默下载系统软件。入口可下载固定 uv/托管 CPython/锁定 Python 依赖，但不得提权或修改
+   shell 配置。
 7. 启动器只在缺失时原子创建；已有内容必须与模板逐字一致。Unix 启动器设可执行位，Windows 使用
    `%~dp0`，macOS/Linux 使用脚本自身目录，均不依赖当前工作目录。
 
 ## 系统入口
 
-- Windows：`install_windows.bat`，优先 `py -3.12`，其次现有 Python/uv；生成 `run_instplot.bat`。
+- Windows：`install_windows.bat`；生成 `run_instplot.bat`。
 - macOS：`install_macos.command`；生成 `run_instplot.command`。
 - Linux：`install_linux.sh`；生成 `run_instplot.sh`，本阶段不默认创建 `.desktop`。
-- 找不到可用 Python/uv 时只显示官方安装指引并失败，不自动执行远程 shell 或修改全局配置。
+- 三个入口优先使用现有 uv；没有 uv 时下载固定 `0.12.5` 官方安装器，校验预置 SHA-256 后安装到
+  项目 `.installer/uv`，不修改 PATH。uv 选取已有兼容 CPython；没有时自动下载托管 CPython。
 
 ## 验收矩阵
 

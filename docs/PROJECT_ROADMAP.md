@@ -1,9 +1,9 @@
 # PlotApp 当前执行路线图
 
 - 更新日期：`2026-08-24`
-- 总体状态：`M3-M6_COMPLETE / M7_PENDING_USER_VALIDATION`
+- 总体状态：`M3-M6_COMPLETE / M7.4_ZERO_PYTHON_INSTALL_IN_PROGRESS / REAL_SAMPLES_PENDING`
 - Model Handoff：`paused`，文件保留；本路线图和 `STATUS.md` 负责普通协作期间的进度记录。
-- 当前自动化基线：本机 `260 passed`；原生 CI run `32678530521` 中 Ubuntu/macOS 各 `260 passed`，Windows
+- 当前自动化基线：本机当前 Python 与 clean managed CPython 3.10.21 均 `271 passed`；原生 CI run `32678530521` 中 Ubuntu/macOS 各 `260 passed`，Windows
   `259 passed, 1 skipped`。clean CPython 3.12 Essentials-only 的 `pip check`、Qt、I/O、绘图、导出和
   67 SVG 验证通过。M2 真实仪器文件验证仍延期到发布前。
 
@@ -146,10 +146,10 @@ Cocoa 桌面会话启动，并修复由此发现的 Qt 6 弃用警告和缺失�
 
 - M2 自动化 I/O 已接受，但真实仪器文件尚未验证。
 - 三系统 CI 已通过，macOS 原生桌面启动已复核；Linux 需预装提供 `libEGL.so.1` 的系统包。
-- Python 3.12 已验证；是否扩展 3.11/3.13 留到 M7，不在当前阶段改变。
-- `.xls` 支持保留；安装器不自动下载 uv/Python；Linux 当前不生成 `.desktop`，如需改变须在 M7 单独决策。
+- M7.4 正在把支持范围扩为 CPython 3.10–3.14，并让三系统入口安全自举项目内 uv 和托管 Python。
+- `.xls` 支持保留；Linux 当前不生成 `.desktop`。
 - 当前历史内存基线很高，但必须先完成 M3.2 数值边界，再修改 history，避免两个根不变量混改。
 
 ## 唯一下一步
 
-取得脱敏真实仪器样本，验证列名、列数和数值。
+完成 CPython 3.10–3.14 兼容矩阵和三系统零 Python 前置自举 CI；之后只剩真实仪器样本。

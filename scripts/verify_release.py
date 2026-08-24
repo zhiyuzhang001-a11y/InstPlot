@@ -11,12 +11,15 @@ import shutil
 import subprocess
 import sys
 import tempfile
-import tomllib
+try:
+    import tomllib
+except ModuleNotFoundError:  # Python 3.10 release-test compatibility
+    import tomli as tomllib
 
 
 ROOT = Path(__file__).resolve().parents[1]
 LOCK_COMMAND = (
-    "uv pip compile pyproject.toml --python-version 3.12 --universal "
+    "uv pip compile pyproject.toml --python-version 3.10 --universal "
     "--generate-hashes --output-file requirements.lock"
 )
 
@@ -30,7 +33,9 @@ def validate_release_docs(root=ROOT):
     required = {
         f"version-{version}-blue": "README version badge does not match pyproject.toml",
         "Windows%20%7C%20macOS%20%7C%20Linux": "platform badge must include all three systems",
-        "Python 3.12": "Python 3.12 requirement is missing",
+        "CPython 3.10–3.14": "supported CPython range is missing",
+        "无需预装 Python": "zero-Python bootstrap guidance is missing",
+        "https://astral.sh/uv/0.12.5/": "pinned uv bootstrap source is missing",
         "至少 1 GB": "minimum free disk guidance is missing",
         "libEGL.so.1": "Linux EGL prerequisite is missing",
         "libegl1": "Ubuntu/Debian EGL package guidance is missing",
@@ -76,16 +81,17 @@ def check_lock(root=ROOT, uv_command="uv"):
     executable = shutil.which(uv_command) if not Path(uv_command).is_file() else uv_command
     if not executable:
         raise RuntimeError(f"uv executable not found: {uv_command}")
+    executable = str(Path(executable).resolve())
     with tempfile.TemporaryDirectory(prefix="instplot-lock-check-") as temporary:
         temporary_root = Path(temporary)
         shutil.copy2(root / "pyproject.toml", temporary_root / "pyproject.toml")
         command = [
-            str(executable),
+            executable,
             "pip",
             "compile",
             "pyproject.toml",
             "--python-version",
-            "3.12",
+            "3.10",
             "--universal",
             "--generate-hashes",
             "--output-file",

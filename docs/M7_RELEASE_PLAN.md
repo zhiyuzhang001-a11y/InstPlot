@@ -3,7 +3,9 @@
 - 状态：`M7.1-M7.2 COMPLETE / M7.3 DESKTOP COMPLETE / REAL SAMPLES PENDING_USER_VALIDATION`
 - 版本：`1.0.0`
 - 发布形态：源代码目录加三系统入口；不制作 App、DMG、MSI、EXE 或 AppImage。
-- 运行时：CPython 3.12；不在 M7 临时扩展到 3.11/3.13。
+- 运行时：CPython 3.10–3.14；由 M7.4 扩展并验证，不承诺当前 PySide6 不支持的 3.15。
+- M7.4 扩展：按用户要求改为 CPython 3.10–3.14，并增加无需预装 Python/uv 的安全自举入口；完成前
+  状态为 `IN_PROGRESS`。
 
 ## M7.1 自动化发布门禁
 
@@ -27,6 +29,13 @@
 2. 尚无用户真实 TXT/DAT/VSM/XLS/XLSX 文件；自动 fixture 不能证明厂商私有变体兼容。
 3. 在收到样本前，M7 总状态只能是 `PENDING_USER_VALIDATION`，不得宣称最终发布验收完成。
 4. 收到样本后只核对列名、列数、数值、编码/分隔符决策和错误位置，不把样本内容提交到公开仓库。
+
+## M7.4 零 Python 前置安装与版本兼容
+
+1. 三系统入口固定 uv 0.12.5 官方安装脚本与 SHA-256，项目内安装且不修改 PATH。
+2. uv 在没有兼容解释器时自动取得托管 CPython；安装器接受 3.10、3.11、3.12、3.13、3.14。
+3. 哈希锁从最低支持版本 3.10 通用解析；CI 对五个 Python 次版本运行安装后烟雾和完整测试。
+4. 原生三系统矩阵强制走本地 uv 自举和 only-managed Python，证明入口不依赖 setup-python 提供的解释器。
 
 ## 验收记录
 
