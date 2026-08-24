@@ -72,11 +72,17 @@
   passed all nine jobs: every Python 3.10–3.14 compatibility job and native Ubuntu/macOS passed 272 tests; Windows
   passed 271 with one POSIX-only skip. Ubuntu passed the real EGL-present branch before its installer workflow.
 
-## 2026-08-24 — click install and user-visible launchers — IN PROGRESS
+## 2026-08-24 — click install and user-visible launchers — AUTOMATION COMPLETE
 
 - Windows creates a Desktop `InstPlot.lnk` targeting project-local `pythonw.exe -m InstPlot`, so later GUI launches do
   not require a command prompt. macOS creates an executable Desktop `InstPlot.command` that detaches the GUI and exits;
   Linux installs `InstPlot.desktop` in the per-user application menu.
 - Shortcut creation is repeatable. An existing different file, symlink or Windows shortcut is retained instead of being
   overwritten. Project-local `run_instplot.*` remains the recovery path.
-- Failure-first launcher tests now pass. Native launcher generation and downloadable archive validation remain pending.
+- Failure-first launcher and archive tests pass. Local archives are Windows `214 KiB`, macOS `215 KiB` and Linux
+  `156 KiB`; they contain only required source/runtime files, and the macOS/Linux executable modes survive packaging.
+- GitHub Actions run `32681539816` passed all nine jobs. The native jobs proved the actual Windows `.lnk`, macOS
+  `.command` and Ubuntu `.desktop` paths exist. Python 3.10–3.14 and native Ubuntu/macOS each passed 279 tests;
+  Windows passed 278 with one POSIX-only skip. The `InstPlot-installers` artifact contains all three archives.
+- Publishing these files as permanent, public GitHub Release v1.0.0 assets remains pending explicit user authorization;
+  CI artifacts are validation/download intermediates rather than the final student-facing distribution page.

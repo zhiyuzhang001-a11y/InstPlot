@@ -1,11 +1,11 @@
 # Current project status
 
 - Date: `2026-08-24`
-- Project state: `M3-M7.4 COMPLETE / M7.5 CLICK-INSTALL-LAUNCH IN_PROGRESS / REAL SAMPLES PENDING_USER_VALIDATION`
+- Project state: `M3-M7.4 COMPLETE / M7.5 AUTOMATION COMPLETE / PUBLIC RELEASE PENDING_USER_AUTHORIZATION / REAL SAMPLES PENDING_USER_VALIDATION`
 - Active plan: `docs/M7_RELEASE_PLAN.md`
 - Model Handoff Protocol: `paused`；文件保留，`MODEL_HANDOFF.md` 当前不参与普通工作路由。
-- Last verified baseline: local current Python `272 passed`；GitHub Actions run `32680280641` 中 Python
-  3.10–3.14 各 `272 passed`，Ubuntu/macOS 各 `272 passed`，Windows `271 passed, 1 skipped`。三系统固定
+- Last verified baseline: local current Python `279 passed`；GitHub Actions run `32681539816` 中 Python
+  3.10–3.14 各 `279 passed`，Ubuntu/macOS 各 `279 passed`，Windows `278 passed, 1 skipped`。三系统固定
   uv 自举、托管 CPython 3.14.7、首次/重复/repair、`pip check`、
   TXT/XLSX/CSV/PNG/67 SVG 和 offscreen 绘图均通过。
 
@@ -31,8 +31,8 @@ macOS、Linux 对应的一键隔离环境安装和启动。
   重建和三系统 CI 均通过；macOS 正式启动器的原生桌面复核也已完成，阶段只等待真实仪器样本。
 - M7.4 已完成：支持范围为 CPython 3.10–3.14；三入口可把固定且经 SHA-256 校验的 uv 安装到项目内，
   并由 uv 在需要时提供托管 Python。macOS 本地、三系统 CI 自举、五版本兼容、哈希锁和 271 项回归均通过。
-- M7.5 已实现三系统用户级启动入口：Windows 桌面 `.lnk`、macOS 桌面 `.command`、Linux 应用菜单
-  `.desktop`；轻量下载包和原生快捷方式验证尚未完成。
+- M7.5 自动化已完成：Windows 桌面 `.lnk`、macOS 桌面 `.command`、Linux 应用菜单 `.desktop` 均通过
+  原生验证；三套轻量下载包已构建并上传 CI artifact。公开 GitHub Release 尚未获授权发布。
 
 ## Current unresolved issues
 
@@ -57,4 +57,4 @@ macOS、Linux 对应的一键隔离环境安装和启动。
 
 ## Next action
 
-`完成 M7.5 用户下载包、双击安装和三系统安装后快捷入口验证。`
+`用户确认是否创建公开 GitHub Release v1.0.0，并把三套已验证安装包作为下载资源发布。`

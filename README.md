@@ -159,6 +159,10 @@ uv；若没有，则从官方固定地址下载 uv 0.12.5 安装器，核对仓�
 项目的 `.installer/uv`。uv 会选取已有的兼容 CPython 3.10–3.14；如果电脑上没有，则自动取得托管的
 兼容 CPython。项目环境仍只创建在 `.venv`，不会修改系统 Python 或 shell 配置。
 
+发布文件名固定为 `InstPlot-1.0.0-windows.zip`、`InstPlot-1.0.0-macos.zip` 和
+`InstPlot-1.0.0-linux.tar.gz`。macOS/Linux 包会保留入口的执行权限。首次打开来自网络的脚本时，Windows
+或 macOS 仍可能显示系统安全确认；用户只需核对来源后选择运行/打开，不需要输入终端命令。
+
 - Windows：双击 `install_windows.bat`；也可在 CMD/PowerShell 运行它。
 - macOS：双击 `install_macos.command`；发布用压缩包会保留执行权限。
 - Linux：双击或运行 `./install_linux.sh`；文件管理器是否允许脚本双击执行取决于桌面设置。

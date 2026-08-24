@@ -1,10 +1,10 @@
 # PlotApp 当前执行路线图
 
 - 更新日期：`2026-08-24`
-- 总体状态：`M3-M7.4_COMPLETE / REAL_SAMPLES_PENDING`
+- 总体状态：`M3-M7.5_AUTOMATION_COMPLETE / PUBLIC_RELEASE_PENDING_AUTHORIZATION / REAL_SAMPLES_PENDING`
 - Model Handoff：`paused`，文件保留；本路线图和 `STATUS.md` 负责普通协作期间的进度记录。
-- 当前自动化基线：本机当前 Python `272 passed`；CI run `32680280641` 中 Python 3.10–3.14 各
-  `272 passed`，原生 Ubuntu/macOS 各 `272 passed`，Windows `271 passed, 1 skipped`。三系统入口强制
+- 当前自动化基线：本机当前 Python `279 passed`；CI run `32681539816` 中 Python 3.10–3.14 各
+  `279 passed`，原生 Ubuntu/macOS 各 `279 passed`，Windows `278 passed, 1 skipped`。三系统入口强制
   自举 uv 和托管 CPython 3.14.7，`pip check`、Qt、I/O、绘图、
   导出和 67 SVG 验证通过。M2 真实仪器文件验证仍延期到发布前。
 
@@ -154,4 +154,4 @@ Cocoa 桌面会话启动，并修复由此发现的 Qt 6 弃用警告和缺失�
 
 ## 唯一下一步
 
-取得脱敏真实仪器样本，验证列名、列数和数值。
+用户确认是否创建公开 GitHub Release v1.0.0，并上传三套已验证安装包。

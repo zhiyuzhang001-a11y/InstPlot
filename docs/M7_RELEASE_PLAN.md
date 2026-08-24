@@ -1,6 +1,6 @@
 # M7 发布验收计划
 
-- 状态：`M7.1-M7.2 COMPLETE / M7.3 DESKTOP COMPLETE / M7.4 COMPLETE / REAL SAMPLES PENDING_USER_VALIDATION`
+- 状态：`M7.1-M7.2 COMPLETE / M7.3 DESKTOP COMPLETE / M7.4 COMPLETE / M7.5 AUTOMATION COMPLETE / PUBLICATION PENDING_USER_AUTHORIZATION / REAL SAMPLES PENDING_USER_VALIDATION`
 - 版本：`1.0.0`
 - 发布形态：源代码目录加三系统入口；不制作 App、DMG、MSI、EXE 或 AppImage。
 - 运行时：CPython 3.10–3.14；由 M7.4 扩展并验证，不承诺当前 PySide6 不支持的 3.15。
@@ -35,6 +35,15 @@
 2. uv 在没有兼容解释器时自动取得托管 CPython；安装器接受 3.10、3.11、3.12、3.13、3.14。
 3. 哈希锁从最低支持版本 3.10 通用解析；CI 对五个 Python 次版本运行安装后烟雾和完整测试。
 4. 原生三系统矩阵强制走本地 uv 自举和 only-managed Python，证明入口不依赖 setup-python 提供的解释器。
+
+## M7.5 双击安装、用户入口与发布包
+
+1. Windows 安装后创建桌面 `.lnk` 并用 `pythonw.exe` 启动；macOS 创建后台启动的桌面 `.command`；
+   Linux 创建用户应用菜单 `.desktop`。已有不同同名入口不得覆盖。
+2. 构建平台专用轻量包，排除测试、Git 元数据和开发文档；macOS/Linux 包显式保留执行权限。
+3. CI 必须验证三系统快捷入口真实存在、三套包内容和权限、五版本兼容及完整回归。
+4. CI artifact 不是面向学生的永久发布页；创建公开 GitHub Release 和上传资源属于单独外部发布动作，
+   必须取得用户明确授权。
 
 ## 验收记录
 
