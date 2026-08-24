@@ -20,12 +20,14 @@
    shell 配置。
 7. 启动器只在缺失时原子创建；已有内容必须与模板逐字一致。Unix 启动器设可执行位，Windows 使用
    `%~dp0`，macOS/Linux 使用脚本自身目录，均不依赖当前工作目录。
+8. 系统入口在核心安装成功后创建用户级快捷入口：Windows 桌面 `.lnk`、macOS 桌面 `.command`、Linux
+   应用菜单 `.desktop`。相同入口可重复使用；任何已有不同内容或目标的同名入口必须保留，不得覆盖。
 
 ## 系统入口
 
-- Windows：`install_windows.bat`；生成 `run_instplot.bat`。
-- macOS：`install_macos.command`；生成 `run_instplot.command`。
-- Linux：`install_linux.sh`；生成 `run_instplot.sh`，本阶段不默认创建 `.desktop`。
+- Windows：`install_windows.bat`；生成 `run_instplot.bat` 和桌面 `InstPlot.lnk`，快捷方式使用 `pythonw.exe`。
+- macOS：`install_macos.command`；生成 `run_instplot.command` 和桌面 `InstPlot.command`，后者后台启动。
+- Linux：`install_linux.sh`；生成 `run_instplot.sh` 和应用菜单 `InstPlot.desktop`。
 - 三个入口优先使用现有 uv；没有 uv 时下载固定 `0.12.5` 官方安装器，校验预置 SHA-256 后安装到
   项目 `.installer/uv`，不修改 PATH。uv 选取已有兼容 CPython；没有时自动下载托管 CPython。
 

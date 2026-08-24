@@ -22,6 +22,9 @@ if not defined UV_EXE (
 :after_install
 if errorlevel 1 goto install_failed
 
+powershell -NoProfile -ExecutionPolicy Bypass -File "%SCRIPT_DIR%scripts\create_windows_shortcut.ps1"
+if errorlevel 1 goto install_failed
+
 if "%INSTPLOT_INSTALL_ONLY%"=="1" exit /b 0
 
 call "%SCRIPT_DIR%run_instplot.bat"

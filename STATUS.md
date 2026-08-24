@@ -1,7 +1,7 @@
 # Current project status
 
 - Date: `2026-08-24`
-- Project state: `M3-M7.4 COMPLETE / REAL SAMPLES PENDING_USER_VALIDATION`
+- Project state: `M3-M7.4 COMPLETE / M7.5 CLICK-INSTALL-LAUNCH IN_PROGRESS / REAL SAMPLES PENDING_USER_VALIDATION`
 - Active plan: `docs/M7_RELEASE_PLAN.md`
 - Model Handoff Protocol: `paused`；文件保留，`MODEL_HANDOFF.md` 当前不参与普通工作路由。
 - Last verified baseline: local current Python `272 passed`；GitHub Actions run `32680280641` 中 Python
@@ -31,6 +31,8 @@ macOS、Linux 对应的一键隔离环境安装和启动。
   重建和三系统 CI 均通过；macOS 正式启动器的原生桌面复核也已完成，阶段只等待真实仪器样本。
 - M7.4 已完成：支持范围为 CPython 3.10–3.14；三入口可把固定且经 SHA-256 校验的 uv 安装到项目内，
   并由 uv 在需要时提供托管 Python。macOS 本地、三系统 CI 自举、五版本兼容、哈希锁和 271 项回归均通过。
+- M7.5 已实现三系统用户级启动入口：Windows 桌面 `.lnk`、macOS 桌面 `.command`、Linux 应用菜单
+  `.desktop`；轻量下载包和原生快捷方式验证尚未完成。
 
 ## Current unresolved issues
 
@@ -55,4 +57,4 @@ macOS、Linux 对应的一键隔离环境安装和启动。
 
 ## Next action
 
-`取得脱敏真实仪器 TXT/DAT/XLS/XLSX 样本并执行列名、列数和数值验证。`
+`完成 M7.5 用户下载包、双击安装和三系统安装后快捷入口验证。`

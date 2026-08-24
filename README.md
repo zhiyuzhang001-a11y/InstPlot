@@ -154,17 +154,24 @@
 
 ## ⚡ 一键安装与启动
 
-下载或解压项目后，在项目目录的终端运行一个系统入口即可。无需预装 Python 或 uv：入口优先使用已有
+下载并解压对应系统的项目包后，可以直接双击安装入口；也可以在项目目录的终端运行同一个入口。无需预装 Python 或 uv：入口优先使用已有
 uv；若没有，则从官方固定地址下载 uv 0.12.5 安装器，核对仓库内固定的 SHA-256 后执行，并只安装到
 项目的 `.installer/uv`。uv 会选取已有的兼容 CPython 3.10–3.14；如果电脑上没有，则自动取得托管的
 兼容 CPython。项目环境仍只创建在 `.venv`，不会修改系统 Python 或 shell 配置。
 
-- Windows CMD/PowerShell：`install_windows.bat`
-- macOS：`./install_macos.command`；若下载后没有执行权限，先运行 `chmod +x install_macos.command`
-- Linux：`./install_linux.sh`；必要时先运行 `chmod +x install_linux.sh`
+- Windows：双击 `install_windows.bat`；也可在 CMD/PowerShell 运行它。
+- macOS：双击 `install_macos.command`；发布用压缩包会保留执行权限。
+- Linux：双击或运行 `./install_linux.sh`；文件管理器是否允许脚本双击执行取决于桌面设置。
 
-安装成功后会自动启动。以后可直接运行生成的 `run_instplot.bat`、`run_instplot.command` 或
-`run_instplot.sh`。修复已有环境时，在终端运行对应安装入口并增加 `--repair`。
+安装成功后会自动启动，并创建普通用户可见的后续入口：
+
+- Windows：桌面上的 `InstPlot` 快捷方式；它使用 `pythonw.exe`，不会打开命令窗口。
+- macOS：桌面上的 `InstPlot.command`；双击后在后台启动，终端只短暂出现。
+- Linux：桌面环境的应用菜单中的 `InstPlot`。
+
+项目目录中的 `run_instplot.bat`、`run_instplot.command` 或 `run_instplot.sh` 始终作为备用入口。快捷方式
+指向当前项目目录，因此安装后不要移动或删除整个 InstPlot 文件夹。修复已有环境时，在终端运行对应
+安装入口并增加 `--repair`。
 
 首次安装需要联网下载 uv、CPython（本机没有兼容版本时）及锁定依赖。uv 安装脚本固定为
 `https://astral.sh/uv/0.12.5/` 下的系统版本，并在执行前验证 SHA-256；下载或校验失败会直接停止。
@@ -260,7 +267,8 @@ python -m pip install --no-deps .
 - 自动化样本已经覆盖 TXT、CSV、DAT、XLS 和 XLSX 的主要解析边界，但尚未获得用户的真实仪器
   TXT/DAT/VSM/XLS/XLSX 文件做最终对照，因此该项状态为 `PENDING_USER_VALIDATION`。
 - VSM 当前指可从内容识别的 VSM 风格 `.dat` 文件，不代表支持任意 `.vsm` 扩展名或厂商私有变体。
-- Linux 不生成 `.desktop` 文件；Windows/macOS/Linux 都通过项目目录中的启动脚本运行。
+- 安装后会创建 Windows 桌面 `.lnk`、macOS 桌面 `.command` 或 Linux 应用菜单 `.desktop`；已有不同
+  内容的同名入口不会被覆盖。它们指向安装目录，移动或删除项目文件夹会使入口失效。
 - 本项目不提供 `.app`、DMG、MSI、独立 EXE 或 AppImage。
 
 ---

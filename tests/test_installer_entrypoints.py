@@ -48,6 +48,26 @@ def test_linux_entrypoint_detects_egl_and_prints_distribution_specific_help():
     assert "eval " not in content
 
 
+def test_install_entrypoints_create_non_app_user_launchers():
+    windows = (ROOT / "install_windows.bat").read_text(encoding="utf-8")
+    macos = (ROOT / "install_macos.command").read_text(encoding="utf-8")
+    linux = (ROOT / "install_linux.sh").read_text(encoding="utf-8")
+
+    assert "create_windows_shortcut.ps1" in windows
+    assert "create_user_launcher.py" in macos
+    assert "--platform macos" in macos
+    assert "create_user_launcher.py" in linux
+    assert "--platform linux" in linux
+
+    shortcut = (ROOT / "scripts" / "create_windows_shortcut.ps1").read_text(
+        encoding="utf-8"
+    )
+    assert "GetFolderPath(\"Desktop\")" in shortcut
+    assert "pythonw.exe" in shortcut
+    assert "CreateShortcut" in shortcut
+    assert "InstPlot.lnk" in shortcut
+
+
 @pytest.mark.skipif(os.name == "nt", reason="Windows filesystems do not expose POSIX execute bits")
 def test_unix_install_entrypoints_are_executable():
     for name in ["install_macos.command", "install_linux.sh"]:

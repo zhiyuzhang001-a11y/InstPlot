@@ -71,3 +71,12 @@
 - Local shell syntax, the missing-library path and the complete 272-test suite pass. GitHub Actions run `32680280641`
   passed all nine jobs: every Python 3.10–3.14 compatibility job and native Ubuntu/macOS passed 272 tests; Windows
   passed 271 with one POSIX-only skip. Ubuntu passed the real EGL-present branch before its installer workflow.
+
+## 2026-08-24 — click install and user-visible launchers — IN PROGRESS
+
+- Windows creates a Desktop `InstPlot.lnk` targeting project-local `pythonw.exe -m InstPlot`, so later GUI launches do
+  not require a command prompt. macOS creates an executable Desktop `InstPlot.command` that detaches the GUI and exits;
+  Linux installs `InstPlot.desktop` in the per-user application menu.
+- Shortcut creation is repeatable. An existing different file, symlink or Windows shortcut is retained instead of being
+  overwritten. Project-local `run_instplot.*` remains the recovery path.
+- Failure-first launcher tests now pass. Native launcher generation and downloadable archive validation remain pending.

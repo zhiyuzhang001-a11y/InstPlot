@@ -27,6 +27,16 @@ jobs:
           python -m pip install --disable-pip-version-check uv==0.12.5
           python scripts/verify_release.py --check-docs --check-lock
 
+      - name: Build end-user installer archives
+        run: python scripts/build_release_archives.py
+
+      - name: Upload end-user installer archives
+        uses: actions/upload-artifact@v7
+        with:
+          name: InstPlot-installers
+          path: dist/*
+          if-no-files-found: error
+
   install:
     name: Install / ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
@@ -90,6 +100,21 @@ jobs:
         if: runner.os == 'Windows'
         shell: cmd
         run: call install_windows.bat
+
+      - name: Verify generated user launcher
+        shell: pwsh
+        run: |
+          if ($IsWindows) {
+            $launcher = Join-Path ([Environment]::GetFolderPath("Desktop")) "InstPlot.lnk"
+          } elseif ($IsMacOS) {
+            $launcher = Join-Path $HOME "Desktop/InstPlot.command"
+          } else {
+            $launcher = Join-Path $HOME ".local/share/applications/InstPlot.desktop"
+          }
+          if (-not (Test-Path -LiteralPath $launcher -PathType Leaf)) {
+            throw "Generated user launcher not found: $launcher"
+          }
+          Write-Host "Generated user launcher: $launcher"
 
       - name: Remove one dependency on Unix
         if: runner.os != 'Windows'

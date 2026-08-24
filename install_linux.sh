@@ -81,6 +81,11 @@ if [ "$status" -ne 0 ]; then
     exit "$status"
 fi
 
+if ! "$SCRIPT_DIR/.venv/bin/python" "$SCRIPT_DIR/scripts/create_user_launcher.py" --platform linux; then
+    printf '%s\n' "Could not create the application-menu launcher; use run_instplot.sh."
+    exit 1
+fi
+
 if [ "${INSTPLOT_INSTALL_ONLY:-0}" = "1" ]; then
     exit 0
 fi

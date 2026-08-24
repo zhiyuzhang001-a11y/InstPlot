@@ -25,6 +25,11 @@ if ! run_installer "$@"; then
     exit 1
 fi
 
+if ! "$SCRIPT_DIR/.venv/bin/python" "$SCRIPT_DIR/scripts/create_user_launcher.py" --platform macos; then
+    printf '%s\n' "无法创建桌面启动入口；项目已经安装，但请保留并使用 run_instplot.command。"
+    exit 1
+fi
+
 if [ "${INSTPLOT_INSTALL_ONLY:-0}" = "1" ]; then
     exit 0
 fi

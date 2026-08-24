@@ -27,6 +27,7 @@ env/
 .venv
 .install-logs/
 .installer/
+dist/
 run_instplot.bat
 run_instplot.command
 run_instplot.sh

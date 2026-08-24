@@ -54,3 +54,10 @@ def test_ci_covers_supported_python_range_and_forced_uv_bootstrap():
 
     assert "python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']" in workflow
     assert 'INSTPLOT_FORCE_UV_BOOTSTRAP: "1"' in workflow
+    assert "Verify generated user launcher" in workflow
+    assert "InstPlot.command" in workflow
+    assert "InstPlot.desktop" in workflow
+    assert "InstPlot.lnk" in workflow
+    assert "build_release_archives.py" in workflow
+    assert "actions/upload-artifact@v7" in workflow
+    assert "InstPlot-installers" in workflow
