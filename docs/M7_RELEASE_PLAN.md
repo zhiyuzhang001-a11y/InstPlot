@@ -30,6 +30,6 @@
 
 ## 验收记录
 
-M7.1-M7.2 已由 GitHub Actions run `32648822899` 验收通过，详细证据集中记录到
+M7.1-M7.2 及桌面启动修复已由 GitHub Actions run `32678530521` 验收通过，详细证据集中记录到
 `reports/M7-release.md`。M7.3 的桌面启动已完成，在收到真实样本前仍保持待验证；`STATUS.md` 和
 `docs/PROJECT_ROADMAP.md` 保留唯一下一动作。

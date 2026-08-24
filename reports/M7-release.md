@@ -42,3 +42,6 @@
   produced no terminal warning output; local regression is `260 passed`.
 - Repository history contains no instrument sample beyond the fixed parser `.xls` fixture, and the GitHub repository has
   no issue carrying an external sample. Real instrument validation therefore remains the only M7 user-supplied gate.
+- Final GitHub Actions run `32678530521` passed the updated release gate and full native matrix: Ubuntu/macOS
+  `260 passed`, Windows `259 passed, 1 skipped`. Evidence:
+  `https://github.com/zhiyuzhang001-a11y/InstPlot/actions/runs/32678530521`.

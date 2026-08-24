@@ -3,8 +3,8 @@
 - 更新日期：`2026-08-24`
 - 总体状态：`M3-M6_COMPLETE / M7_PENDING_USER_VALIDATION`
 - Model Handoff：`paused`，文件保留；本路线图和 `STATUS.md` 负责普通协作期间的进度记录。
-- 当前自动化基线：本机 `260 passed`；原生 CI Ubuntu/macOS 各 `258 passed`，Windows
-  `257 passed, 1 skipped`。clean CPython 3.12 Essentials-only 的 `pip check`、Qt、I/O、绘图、导出和
+- 当前自动化基线：本机 `260 passed`；原生 CI run `32678530521` 中 Ubuntu/macOS 各 `260 passed`，Windows
+  `259 passed, 1 skipped`。clean CPython 3.12 Essentials-only 的 `pip check`、Qt、I/O、绘图、导出和
   67 SVG 验证通过。M2 真实仪器文件验证仍延期到发布前。
 
 ## 总目标
@@ -134,8 +134,8 @@ Ubuntu/macOS 各 254 项，Windows 253 项加一个 POSIX 可执行位跳过。�
 
 当前结果：已增加 `docs/M7_RELEASE_PLAN.md`、`reports/M7-release.md` 和标准库发布验证器；README
 占位链接、平台、磁盘、Linux EGL、故障排查及格式边界已修订；固定 `uv 0.12.5` 本地字节级重建锁通过。
-固定 `uv 0.12.5` 字节级锁重建及三系统 CI run `32648822899` 已通过；Ubuntu/macOS 各 258 项，Windows
-257 项加一个 POSIX-only 跳过。三系统同版本体积证据已记录并关闭 M5。macOS 正式启动器已在原生
+固定 `uv 0.12.5` 字节级锁重建及最新三系统 CI run `32678530521` 已通过；Ubuntu/macOS 各 260 项，Windows
+259 项加一个 POSIX-only 跳过。三系统同版本体积证据已记录并关闭 M5。macOS 正式启动器已在原生
 Cocoa 桌面会话启动，并修复由此发现的 Qt 6 弃用警告和缺失字体重复日志。真实仪器文件仍保持待验证，
 不能宣称 M7 完全完成。
 

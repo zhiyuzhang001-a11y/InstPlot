@@ -4,8 +4,8 @@
 - Project state: `M3-M6 COMPLETE / M7 PENDING_USER_VALIDATION`
 - Active plan: `docs/M7_RELEASE_PLAN.md`
 - Model Handoff Protocol: `paused`；文件保留，`MODEL_HANDOFF.md` 当前不参与普通工作路由。
-- Last verified baseline: local `260 passed`；GitHub Actions run `32648822899` 中 Ubuntu/macOS 各
-  `258 passed`，Windows `257 passed, 1 skipped`。三系统 clean CPython 3.12 Essentials 首次/重复/repair、`pip check`、
+- Last verified baseline: local `260 passed`；GitHub Actions run `32678530521` 中 Ubuntu/macOS 各
+  `260 passed`，Windows `259 passed, 1 skipped`。三系统 clean CPython 3.12 Essentials 首次/重复/repair、`pip check`、
   TXT/XLSX/CSV/PNG/67 SVG 和 offscreen 绘图均通过。
 
 ## Overall goal
