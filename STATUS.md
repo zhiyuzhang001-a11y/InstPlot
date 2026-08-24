@@ -4,9 +4,9 @@
 - Project state: `M3-M7.4 COMPLETE / REAL SAMPLES PENDING_USER_VALIDATION`
 - Active plan: `docs/M7_RELEASE_PLAN.md`
 - Model Handoff Protocol: `paused`；文件保留，`MODEL_HANDOFF.md` 当前不参与普通工作路由。
-- Last verified baseline: local current Python and clean managed CPython 3.10.21 each `271 passed`；GitHub Actions
-  run `32679629432` 中 Python 3.10–3.14 各 `271 passed`，Ubuntu/macOS 各 `271 passed`，Windows
-  `270 passed, 1 skipped`。三系统固定 uv 自举、托管 CPython 3.14.7、首次/重复/repair、`pip check`、
+- Last verified baseline: local current Python `272 passed`；GitHub Actions run `32680280641` 中 Python
+  3.10–3.14 各 `272 passed`，Ubuntu/macOS 各 `272 passed`，Windows `271 passed, 1 skipped`。三系统固定
+  uv 自举、托管 CPython 3.14.7、首次/重复/repair、`pip check`、
   TXT/XLSX/CSV/PNG/67 SVG 和 offscreen 绘图均通过。
 
 ## Overall goal
@@ -38,8 +38,8 @@ macOS、Linux 对应的一键隔离环境安装和启动。
 2. Footprint：同一 CI 环境、同版本 PySide6 的逻辑字节比较已完成；Essentials 相比完整 PySide6 在
    Linux/macOS/Windows 分别节省 `40.54% / 57.97% / 44.25%`。测量使用临时环境副本，不污染测试环境。
 3. Installation：共享安装器和三系统入口已通过原生 CI 的首次、重复、repair 和安装后功能验证；
-   Ubuntu 运行 PySide6 前需要宿主系统提供 `libEGL.so.1`（CI 使用 `libegl1`）；日志文件使用时间戳前缀
-   和原子唯一分配，避免 Windows 低时钟分辨率下的名称碰撞。
+   Linux 入口会在下载前检测宿主 `libEGL.so.1`，缺少时按发行版显示安装命令但不执行 sudo；日志文件
+   使用时间戳前缀和原子唯一分配，避免 Windows 低时钟分辨率下的名称碰撞。
 4. Release：README、锁重建、三系统自动发布门禁和 macOS 原生桌面启动已闭环；真实仪器文件仍未取得。
 5. Fonts：启动时只使用已安装的命名字体并保留通用字体族回退；缺少 `SimHei` 不再产生重复日志。
 6. Packaging：许可证元数据已迁移到 SPDX `MIT` 和 `license-files`，warnings-as-error 构建通过。
