@@ -1,6 +1,6 @@
 # M7 发布验收计划
 
-- 状态：`M7.1-M7.2 COMPLETE / M7.3 PENDING_USER_VALIDATION`
+- 状态：`M7.1-M7.2 COMPLETE / M7.3 DESKTOP COMPLETE / REAL SAMPLES PENDING_USER_VALIDATION`
 - 版本：`1.0.0`
 - 发布形态：源代码目录加三系统入口；不制作 App、DMG、MSI、EXE 或 AppImage。
 - 运行时：CPython 3.12；不在 M7 临时扩展到 3.11/3.13。
@@ -23,7 +23,7 @@
 
 ## M7.3 普通用户与真实样本
 
-1. 干净 CI runner 作为无开发依赖的自动替代验收，但不能替代真实桌面用户双击启动。
+1. 干净 CI runner 作为无开发依赖的自动验收；macOS 另用正式生成的启动器完成原生 Cocoa 桌面启动。
 2. 尚无用户真实 TXT/DAT/VSM/XLS/XLSX 文件；自动 fixture 不能证明厂商私有变体兼容。
 3. 在收到样本前，M7 总状态只能是 `PENDING_USER_VALIDATION`，不得宣称最终发布验收完成。
 4. 收到样本后只核对列名、列数、数值、编码/分隔符决策和错误位置，不把样本内容提交到公开仓库。
@@ -31,5 +31,5 @@
 ## 验收记录
 
 M7.1-M7.2 已由 GitHub Actions run `32648822899` 验收通过，详细证据集中记录到
-`reports/M7-release.md`。M7.3 在收到真实样本和桌面会话复核前保持待验证；`STATUS.md` 和
+`reports/M7-release.md`。M7.3 的桌面启动已完成，在收到真实样本前仍保持待验证；`STATUS.md` 和
 `docs/PROJECT_ROADMAP.md` 保留唯一下一动作。

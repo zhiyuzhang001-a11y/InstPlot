@@ -1,10 +1,10 @@
 # Current project status
 
-- Date: `2026-08-23`
+- Date: `2026-08-24`
 - Project state: `M3-M6 COMPLETE / M7 PENDING_USER_VALIDATION`
 - Active plan: `docs/M7_RELEASE_PLAN.md`
 - Model Handoff Protocol: `paused`；文件保留，`MODEL_HANDOFF.md` 当前不参与普通工作路由。
-- Last verified baseline: local `258 passed`；GitHub Actions run `32648822899` 中 Ubuntu/macOS 各
+- Last verified baseline: local `260 passed`；GitHub Actions run `32648822899` 中 Ubuntu/macOS 各
   `258 passed`，Windows `257 passed, 1 skipped`。三系统 clean CPython 3.12 Essentials 首次/重复/repair、`pip check`、
   TXT/XLSX/CSV/PNG/67 SVG 和 offscreen 绘图均通过。
 
@@ -27,7 +27,7 @@ macOS、Linux 对应的一键隔离环境安装和启动。
   `160,010,560 / 640,005,280 bytes = 25.00%`，十步往返通过。
 - M4 GUI/性能、M5 Essentials 功能兼容与三系统体积证据、M6 三系统安装矩阵均已完成。
 - M7 自动发布门禁已完成：发布文档、真实仓库元数据、标准库验证器、固定 `uv 0.12.5` 字节级锁
-  重建和三系统 CI 均通过；阶段只等待真实样本与普通用户桌面复核。
+  重建和三系统 CI 均通过；macOS 正式启动器的原生桌面复核也已完成，阶段只等待真实仪器样本。
 
 ## Current unresolved issues
 
@@ -37,9 +37,8 @@ macOS、Linux 对应的一键隔离环境安装和启动。
 3. Installation：共享安装器和三系统入口已通过原生 CI 的首次、重复、repair 和安装后功能验证；
    Ubuntu 运行 PySide6 前需要宿主系统提供 `libEGL.so.1`（CI 使用 `libegl1`）；日志文件使用时间戳前缀
    和原子唯一分配，避免 Windows 低时钟分辨率下的名称碰撞。
-4. Release：README、锁重建及三系统自动发布门禁已闭环；真实仪器文件及普通用户桌面会话复核仍未闭环。
-5. Fonts：macOS 缺少 `SimHei` 时正式基准出现重复 Matplotlib 字体回退日志；改字体可能影响外观，
-   留到 M7 配置化处理。
+4. Release：README、锁重建、三系统自动发布门禁和 macOS 原生桌面启动已闭环；真实仪器文件仍未取得。
+5. Fonts：启动时只使用已安装的命名字体并保留通用字体族回退；缺少 `SimHei` 不再产生重复日志。
 6. Packaging：许可证元数据已迁移到 SPDX `MIT` 和 `license-files`，warnings-as-error 构建通过。
 
 ## Stage order
@@ -53,4 +52,4 @@ macOS、Linux 对应的一键隔离环境安装和启动。
 
 ## Next action
 
-`取得脱敏真实仪器 TXT/DAT/XLS/XLSX 样本并执行列名、列数、数值验证，同时完成一次普通用户桌面启动复核。`
+`取得脱敏真实仪器 TXT/DAT/XLS/XLSX 样本并执行列名、列数和数值验证。`

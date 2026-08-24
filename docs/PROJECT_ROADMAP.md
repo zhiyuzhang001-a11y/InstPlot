@@ -1,9 +1,9 @@
 # PlotApp 当前执行路线图
 
-- 更新日期：`2026-08-23`
+- 更新日期：`2026-08-24`
 - 总体状态：`M3-M6_COMPLETE / M7_PENDING_USER_VALIDATION`
 - Model Handoff：`paused`，文件保留；本路线图和 `STATUS.md` 负责普通协作期间的进度记录。
-- 当前自动化基线：本机 `258 passed`；原生 CI Ubuntu/macOS 各 `258 passed`，Windows
+- 当前自动化基线：本机 `260 passed`；原生 CI Ubuntu/macOS 各 `258 passed`，Windows
   `257 passed, 1 skipped`。clean CPython 3.12 Essentials-only 的 `pip check`、Qt、I/O、绘图、导出和
   67 SVG 验证通过。M2 真实仪器文件验证仍延期到发布前。
 
@@ -135,8 +135,9 @@ Ubuntu/macOS 各 254 项，Windows 253 项加一个 POSIX 可执行位跳过。�
 当前结果：已增加 `docs/M7_RELEASE_PLAN.md`、`reports/M7-release.md` 和标准库发布验证器；README
 占位链接、平台、磁盘、Linux EGL、故障排查及格式边界已修订；固定 `uv 0.12.5` 本地字节级重建锁通过。
 固定 `uv 0.12.5` 字节级锁重建及三系统 CI run `32648822899` 已通过；Ubuntu/macOS 各 258 项，Windows
-257 项加一个 POSIX-only 跳过。三系统同版本体积证据已记录并关闭 M5。真实仪器文件和人工桌面会话
-仍保持待验证，不能宣称 M7 完全完成。
+257 项加一个 POSIX-only 跳过。三系统同版本体积证据已记录并关闭 M5。macOS 正式启动器已在原生
+Cocoa 桌面会话启动，并修复由此发现的 Qt 6 弃用警告和缺失字体重复日志。真实仪器文件仍保持待验证，
+不能宣称 M7 完全完成。
 
 验收：三系统 CI 和安装矩阵全绿；真实样本列名/列数/值正确；锁文件可重建；限制与磁盘需求准确。
 若发布前仍没有真实仪器文件，则状态必须保留 `PENDING_USER_VALIDATION`，不能宣称完全发布验收。
@@ -144,11 +145,11 @@ Ubuntu/macOS 各 254 项，Windows 253 项加一个 POSIX 可执行位跳过。�
 ## 当前风险与决策点
 
 - M2 自动化 I/O 已接受，但真实仪器文件尚未验证。
-- 三系统 CI 已通过；真实普通用户桌面会话仍需发布前复核，Linux 需预装提供 `libEGL.so.1` 的系统包。
+- 三系统 CI 已通过，macOS 原生桌面启动已复核；Linux 需预装提供 `libEGL.so.1` 的系统包。
 - Python 3.12 已验证；是否扩展 3.11/3.13 留到 M7，不在当前阶段改变。
 - `.xls` 支持保留；安装器不自动下载 uv/Python；Linux 当前不生成 `.desktop`，如需改变须在 M7 单独决策。
 - 当前历史内存基线很高，但必须先完成 M3.2 数值边界，再修改 history，避免两个根不变量混改。
 
 ## 唯一下一步
 
-取得脱敏真实仪器样本，验证列名、列数和数值，并完成一次普通用户桌面启动复核。
+取得脱敏真实仪器样本，验证列名、列数和数值。

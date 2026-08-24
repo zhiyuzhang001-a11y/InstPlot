@@ -27,4 +27,18 @@
     `451,825,850 bytes` (`44.25%`).
 - CI evidence: `https://github.com/zhiyuzhang001-a11y/InstPlot/actions/runs/32648822899`.
 - No real instrument file was available. Automated fixtures remain accepted, while real TXT/DAT/VSM/XLS/XLSX
-  validation and a human desktop-session install remain pending rather than being inferred from CI.
+  validation remains pending rather than being inferred from CI.
+
+## 2026-08-24 — native desktop follow-up
+
+- Ran `INSTPLOT_INSTALL_ONLY=1 ./install_macos.command` against the existing healthy environment. It atomically created
+  the missing `run_instplot.command`; the next installer dry-run reported `healthy`, an identical launcher and no action.
+- Launched through `run_instplot.command` with the native Cocoa backend. The project `.venv` process remained alive and
+  `~/Library/Logs/InstPlot/instplot.log` recorded `diagnostics_started` and `application_start`, closing the macOS desktop
+  startup item without relying on the offscreen CI backend.
+- The first native run exposed deprecated Qt 6 high-DPI attributes and repeated missing-`SimHei` font messages. Added two
+  failure-first release tests, removed the Qt 5-era attributes (high DPI is always enabled in Qt 6), and filtered named
+  font fallbacks against Matplotlib's installed font list while retaining a generic fallback. The repeated native launch
+  produced no terminal warning output; local regression is `260 passed`.
+- Repository history contains no instrument sample beyond the fixed parser `.xls` fixture, and the GitHub repository has
+  no issue carrying an external sample. Real instrument validation therefore remains the only M7 user-supplied gate.

@@ -19,6 +19,7 @@ from PySide6.QtCore import Qt, QSize, QTimer
 import shutil
 import contextlib
 import matplotlib.pyplot as plt
+from matplotlib import font_manager
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.patches import Rectangle
 from instplot_io import (
@@ -59,8 +60,25 @@ from instplot_tasks import TaskController
 
 # 仅在首次绘图时初始化 matplotlib 样式
 _mpl_style_initialized = False
+_available_font_names = None
 ASYNC_FIT_POINT_THRESHOLD = 250_000
 LOGGER = logging.getLogger("instplot")
+
+
+def _font_families(primary, available=None):
+    """Return installed named fallbacks plus a quiet generic fallback."""
+    global _available_font_names
+    if available is None:
+        if _available_font_names is None:
+            _available_font_names = {entry.name for entry in font_manager.fontManager.ttflist}
+        available = _available_font_names
+    families = []
+    for family in (primary, "Heiti TC", "SimHei"):
+        if family in available and family not in families:
+            families.append(family)
+    families.append("sans-serif")
+    return families
+
 
 def _initialize_mpl_style():
     """延迟初始化 matplotlib 样式，仅在首次绘图时调用"""
@@ -81,7 +99,7 @@ def _initialize_mpl_style():
         'text.usetex': False,
 
         # 主字体：Times New Roman（serif）
-        'font.family': ['Times New Roman', 'Heiti TC', 'SimHei'],
+        'font.family': _font_families('Times New Roman'),
 
         # mathtext
         'mathtext.fontset': 'cm',
@@ -3644,7 +3662,7 @@ class PlotApp(QMainWindow):
             # 设置轴标签（使用 FontProperties：西文优先，中文回退）
             from matplotlib.font_manager import FontProperties
             font_family = self.settings_state.get('fontfamily', 'Helvetica')
-            label_fp = FontProperties(family=[font_family, 'Heiti TC', 'SimHei'], size=self.settings_state['fontsize'])
+            label_fp = FontProperties(family=_font_families(font_family), size=self.settings_state['fontsize'])
             if self.settings_state['xlabel']:
                 preview_ax.set_xlabel(self.settings_state['xlabel'], fontproperties=label_fp, labelpad=self.settings_state.get('xlabel_pad', 3))
             if self.settings_state['ylabel']:
@@ -3680,7 +3698,7 @@ class PlotApp(QMainWindow):
                 from matplotlib.font_manager import FontProperties
                 legend_font = self.settings_state.get('fontfamily', 'Helvetica')
                 # 为了支持中文，传入一个包含常见中文字体的备选列表
-                font_prop = FontProperties(family=[legend_font, 'Heiti TC', 'SimHei'], size=self.settings_state['legend_fontsize'])
+                font_prop = FontProperties(family=_font_families(legend_font), size=self.settings_state['legend_fontsize'])
                 leg = preview_ax.legend(loc=loc, frameon=False, prop=font_prop)
                 
 
@@ -4407,7 +4425,7 @@ class PlotApp(QMainWindow):
                     # 重新设置图例（使用支持中文的字体属性）
                     from matplotlib.font_manager import FontProperties
                     legend_font = self.settings_state.get('fontfamily', 'Helvetica')
-                    font_prop = FontProperties(family=[legend_font, 'Heiti TC', 'SimHei'], size=fontsize)
+                    font_prop = FontProperties(family=_font_families(legend_font), size=fontsize)
                     if handles and labels:
                         self.ax.legend(handles, labels, fontsize=fontsize, loc=loc_arg, frameon=frameon, framealpha=framealpha, prop=font_prop)
                 else:
@@ -4418,7 +4436,7 @@ class PlotApp(QMainWindow):
                 try:
                     from matplotlib.font_manager import FontProperties
                     legend_font = self.settings_state.get('fontfamily', 'Helvetica')
-                    font_prop = FontProperties(family=[legend_font, 'Heiti TC', 'SimHei'], size=12)
+                    font_prop = FontProperties(family=_font_families(legend_font), size=12)
                     self.ax.legend(prop=font_prop)
                 except Exception:
                     pass
@@ -5972,11 +5990,6 @@ def denoise_data(df, y_col='rem', window_length=11, polyorder=3, x_col=None, x1=
 
 if __name__ == "__main__":
     log_path = configure_logging()
-    # 启用高 DPI 支持（必须在创建 QApplication 之前设置）
-    # 启用高 DPI 像素图
-    QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
-    QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps, True)
-    
     # 兼容在嵌入/交互环境中已存在 QApplication 的情况
     app = QApplication.instance() or QApplication(sys.argv)
     sys.excepthook = make_exception_hook(

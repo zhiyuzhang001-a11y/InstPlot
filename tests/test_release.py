@@ -3,6 +3,7 @@ from pathlib import Path
 from types import SimpleNamespace
 
 import scripts.verify_release as release
+import InstPlot
 from scripts.verify_release import environment_size, validate_release_docs
 
 
@@ -63,3 +64,21 @@ def test_full_pyside_measurement_uses_disposable_environment(tmp_path, monkeypat
     assert result["full_bytes"] == 250
     assert all(command[0] != str(python) for command in commands)
     assert not any("uninstall" in command for command in commands)
+
+
+def test_qt6_entrypoint_does_not_enable_deprecated_high_dpi_attributes():
+    source = (ROOT / "InstPlot.py").read_text(encoding="utf-8")
+
+    assert "AA_EnableHighDpiScaling" not in source
+    assert "AA_UseHighDpiPixmaps" not in source
+
+
+def test_font_fallbacks_skip_unavailable_named_fonts():
+    assert InstPlot._font_families(
+        "Times New Roman",
+        available={"Times New Roman", "Heiti TC"},
+    ) == ["Times New Roman", "Heiti TC", "sans-serif"]
+    assert InstPlot._font_families(
+        "Helvetica",
+        available=set(),
+    ) == ["sans-serif"]
