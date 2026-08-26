@@ -1,82 +1,47 @@
-# 字节编译和Python缓存
+# Python bytecode and build output
 __pycache__/
 *.py[cod]
-*$py.class
 *.so
 .Python
 build/
-develop-eggs/
 dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
 *.egg-info/
-.installed.cfg
-*.egg
 
-# 虚拟环境
+# Virtual environments
+.venv/
 venv/
-ENV/
 env/
-.venv
-.install-logs/
-.installer/
-dist/
-run_instplot.bat
-run_instplot.command
-run_instplot.sh
+ENV/
 
-# IDE和编辑器
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-.DS_Store
-
-# 项目特定的敏感文件
-license.dat
-.env
-config.local.py
-
-# 测试和临时文件
+# Tests, coverage, and local logs
 .pytest_cache/
 .coverage
 htmlcov/
 .tox/
 *.log
 
-# macOS特定
+# Local configuration
+.env
+config.local.py
+
+# Measurement data kept outside the test fixtures
+data/
+*.csv
+!tests/fixtures/**/*.csv
+*.txt.bak
+
+# Editors and operating systems
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
 .DS_Store
 .AppleDouble
 .LSOverride
-*.swp
-
-# Windows特定
 Thumbs.db
-# PyInstaller
-*.spec
 
-# Measurement / data files
-data/
-*.csv
-!instplot-lite/tests/fixtures/*.csv
-*.txt.bak
-
-# Jupyter
+# Notebook and GUI caches
 .ipynb_checkpoints/
-
-# Matplotlib cache
 .matplotlib/
-
-# Qt
 *.qmlc
-
-# InstPlot Lite (Rust)
-instplot-lite/target/
