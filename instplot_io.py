@@ -14,7 +14,7 @@ import chardet
 import pandas as pd
 
 
-TEXT_EXTENSIONS = {".txt", ".csv", ".dat"}
+TEXT_EXTENSIONS = {".txt", ".csv", ".dat", ".tsv"}
 EXCEL_EXTENSIONS = {".xls", ".xlsx"}
 WHITESPACE_SEPARATOR = r"\s+"
 PHYSICAL_LINE_PATTERN = re.compile(r"[^\r\n]*(?:\r\n|[\r\n]|$)")
@@ -106,6 +106,8 @@ class DataIOError(RuntimeError):
 def _split_fields(content: str, separator: str) -> list[str]:
     if separator == WHITESPACE_SEPARATOR:
         return re.split(WHITESPACE_SEPARATOR, content.strip())
+    if separator == "\t" and "\t" not in content:
+        return re.split(WHITESPACE_SEPARATOR, content.strip())
     if '"' not in content:
         return content.split(separator)
     return next(csv.reader([content], delimiter=separator, strict=True))
@@ -161,7 +163,12 @@ def _sample_significant_lines(text: str, limit: int = 10) -> list[tuple[int, str
 
 def _numeric_row(line: str, columns_count: int | None = None) -> tuple[bool, str | None, int]:
     """Return whether a line is numeric and the separator that proves it."""
-    for separator in (",", ";", WHITESPACE_SEPARATOR, "\t"):
+    separators = (
+        ("\t", ",", ";", WHITESPACE_SEPARATOR)
+        if "\t" in line
+        else (",", ";", WHITESPACE_SEPARATOR, "\t")
+    )
+    for separator in separators:
         try:
             parts = [part.strip() for part in _split_fields(line, separator) if part.strip()]
         except csv.Error:
@@ -365,26 +372,41 @@ def _normalize_and_validate_rows(
     *,
     path: Path,
     encoding: str,
+    expected_columns: int | None = None,
 ) -> str:
     """Preserve valid fields while rejecting real width mismatches with source lines."""
     raw_lines = text.splitlines(keepends=True)
-    try:
-        expected_columns = len(
-            _split_fields(raw_lines[reference_line].rstrip("\r\n"), separator)
-        )
-    except csv.Error as error:
-        raise DataIOError(
-            path=path,
-            operation="import",
-            code="text_parse_failed",
-            reason=str(error),
-            encoding=encoding,
-            separator=separator,
-            line_number=reference_line + 1,
-        ) from error
+    if expected_columns is None:
+        try:
+            expected_columns = len(
+                _split_fields(raw_lines[reference_line].rstrip("\r\n"), separator)
+            )
+        except csv.Error as error:
+            raise DataIOError(
+                path=path,
+                operation="import",
+                code="text_parse_failed",
+                reason=str(error),
+                encoding=encoding,
+                separator=separator,
+                line_number=reference_line + 1,
+            ) from error
     normalized_lines: list[str] = []
     for line_number, line in enumerate(raw_lines):
-        if line_number < start_line or not line.strip() or line.lstrip().startswith("#"):
+        if line_number < start_line:
+            if line_number == reference_line and separator != WHITESPACE_SEPARATOR:
+                content = line.rstrip("\r\n")
+                newline = line[len(content) :]
+                fields = _split_fields(content, separator)
+                while len(fields) > expected_columns and not fields[-1].strip():
+                    fields.pop()
+                output = StringIO()
+                csv.writer(output, delimiter=separator, lineterminator=newline).writerow(fields)
+                normalized_lines.append(output.getvalue())
+            else:
+                normalized_lines.append(line)
+            continue
+        if not line.strip() or line.lstrip().startswith("#"):
             normalized_lines.append(line)
             continue
         content = line.rstrip("\r\n")
@@ -455,6 +477,16 @@ def _read_text(path: Path) -> ImportResult:
         )
     chosen_separator = separator or "\t"
     try:
+        width_reference = header_index if header_index is not None else data_start_index
+        data_fields = _split_fields(
+            text.splitlines()[width_reference], chosen_separator
+        )
+        while (
+            chosen_separator != WHITESPACE_SEPARATOR
+            and data_fields
+            and not data_fields[-1].strip()
+        ):
+            data_fields.pop()
         normalized_text = _normalize_and_validate_rows(
             text,
             chosen_separator,
@@ -462,6 +494,7 @@ def _read_text(path: Path) -> ImportResult:
             header_index if header_index is not None else data_start_index,
             path=path,
             encoding=encoding,
+            expected_columns=len(data_fields),
         )
         frame = pd.read_csv(
             StringIO(normalized_text),

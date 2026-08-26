@@ -1,9 +1,8 @@
 # PlotApp 当前执行路线图
 
 > [!NOTE]
-> 这是旧 Python 版在 M3–M7 阶段的历史路线图，不是当前 InstPlot Lite 的待办列表。
-> 普通用户请查看 [InstPlot Lite 下载与使用说明](../README.md)，当前开发状态请查看
-> [Lite 状态页](../instplot-lite/docs/STATUS.md)。
+> 这是 Python 版在 M3–M7 阶段的历史路线图，不是当前待办列表。现行用户产品和下载请查看
+> [InstPlot Lite](https://github.com/zhiyuzhang001-a11y/InstPlot)。
 
 - 更新日期：`2026-08-24`
 - 总体状态：`M3-M7.5_AUTOMATION_COMPLETE / PUBLIC_RELEASE_PENDING_AUTHORIZATION / REAL_SAMPLES_PENDING`

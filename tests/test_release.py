@@ -39,16 +39,15 @@ def test_environment_size_counts_regular_files_without_following_symlinks(tmp_pa
     assert environment_size(environment) == 10
 
 
-def test_release_workflow_checks_lock_and_cross_platform_footprint():
-    workflow = (ROOT / ".github" / "workflows" / "native-install.yml").read_text(
+def test_source_workflow_runs_cross_platform_without_packaging():
+    workflow = (ROOT / ".github" / "workflows" / "python-tests.yml").read_text(
         encoding="utf-8"
     )
-    assert "verify_release.py --check-docs --check-lock" in workflow
-    assert "uv==0.12.5" in workflow
-    assert "--measure-full-pyside" in workflow
-    assert workflow.index("--measure-full-pyside") < workflow.index(
-        "-m pip install pytest==8.4.2"
-    )
+    assert "ubuntu-latest, macos-latest, windows-latest" in workflow
+    assert "verify_release.py --check-docs" in workflow
+    assert "python -m pytest -q" in workflow
+    assert "Build end-user installer" not in workflow
+    assert "upload-artifact" not in workflow
 
 
 def test_lock_check_resolves_relative_uv_before_changing_directory(tmp_path, monkeypatch):

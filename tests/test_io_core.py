@@ -309,6 +309,33 @@ def test_core_reads_plain_dat_without_gui(tmp_path):
     assert result.frame.to_dict("list") == {"field": [1, 3], "signal": [2, 4]}
 
 
+def test_core_preserves_spaces_in_tab_separated_headers(tmp_path):
+    path = tmp_path / "instrument.dat"
+    path.write_text(
+        "Time (sec)\tTemperature (K)\tField (Oe)\n1\t300\t20\n",
+        encoding="utf-8",
+    )
+
+    result = read_data_file(path)
+
+    assert result.separator == "\t"
+    assert result.frame.columns.tolist() == [
+        "Time (sec)",
+        "Temperature (K)",
+        "Field (Oe)",
+    ]
+    assert result.frame.iloc[0].tolist() == [1, 300, 20]
+
+
+def test_core_reads_tsv_extension(tmp_path):
+    path = tmp_path / "measurement.tsv"
+    path.write_text("x value\ty value\n1\t2\n", encoding="utf-8")
+
+    result = read_data_file(path)
+
+    assert result.frame.to_dict("list") == {"x value": [1], "y value": [2]}
+
+
 def test_core_reads_vsm_dat_with_fixed_metadata_offset(tmp_path):
     path = tmp_path / "measurement.dat"
     metadata = ["vSm export"] + [f"metadata {index}" for index in range(30)]

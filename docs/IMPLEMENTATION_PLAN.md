@@ -1,9 +1,8 @@
 # PlotApp 优化与跨平台安装实施计划
 
 > [!NOTE]
-> 这是旧 Python 版的历史计划，内容中的“不制作独立 App 安装包”不再是当前产品方向。
-> 普通用户请查看 [InstPlot Lite 下载与使用说明](../README.md)，当前开发状态请查看
-> [Lite 状态页](../instplot-lite/docs/STATUS.md)。
+> 这是 Python 版已经完成的历史计划，不是当前待办列表。现行用户产品和下载请查看
+> [InstPlot Lite](https://github.com/zhiyuzhang001-a11y/InstPlot)。
 
 ## Objective
 
