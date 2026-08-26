@@ -26,8 +26,8 @@ dependencies = [
 test = ["pytest>=8,<9"]
 
 [project.urls]
-Repository = "https://github.com/zhiyuzhang001-a11y/InstPlot-Python-Legacy"
-Issues = "https://github.com/zhiyuzhang001-a11y/InstPlot-Python-Legacy/issues"
+Repository = "https://github.com/zhiyuzhang001-a11y/InstPlot"
+Issues = "https://github.com/zhiyuzhang001-a11y/InstPlot/issues"
 
 [tool.setuptools]
 py-modules = ["InstPlot", "instplot_diagnostics", "instplot_dialogs", "instplot_fitting", "instplot_history", "instplot_io", "instplot_processing", "instplot_rendering", "instplot_tasks"]

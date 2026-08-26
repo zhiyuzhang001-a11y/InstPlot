@@ -37,8 +37,8 @@ def validate_release_docs(root=ROOT):
         "不再提供安装包": "source-only archive guidance is missing",
         "libEGL.so.1": "Linux EGL prerequisite is missing",
         "libegl1": "Ubuntu/Debian EGL package guidance is missing",
-        "https://github.com/zhiyuzhang001-a11y/InstPlot": "current Lite repository link is missing",
-        "https://github.com/zhiyuzhang001-a11y/InstPlot-Python-Legacy/issues": "legacy issue tracker link is missing",
+        "https://github.com/zhiyuzhang001-a11y/InstPlot-Lite": "current Lite repository link is missing",
+        "https://github.com/zhiyuzhang001-a11y/InstPlot/issues": "legacy issue tracker link is missing",
         LOCK_COMMAND: "canonical lock regeneration command is missing",
     }
     for marker, reason in required.items():
@@ -47,7 +47,7 @@ def validate_release_docs(root=ROOT):
     for placeholder in ("your-email", "yourusername", "example.com"):
         if placeholder in legacy_guide.lower():
             errors.append(f"legacy guide contains placeholder: {placeholder}")
-    expected_issues = "https://github.com/zhiyuzhang001-a11y/InstPlot-Python-Legacy/issues"
+    expected_issues = "https://github.com/zhiyuzhang001-a11y/InstPlot/issues"
     if metadata["project"].get("urls", {}).get("Issues") != expected_issues:
         errors.append("pyproject.toml issue tracker metadata is missing or incorrect")
     return errors

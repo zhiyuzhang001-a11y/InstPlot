@@ -2,7 +2,7 @@
 
 > [!NOTE]
 > 这是 Python 版已经完成的历史计划，不是当前待办列表。现行用户产品和下载请查看
-> [InstPlot Lite](https://github.com/zhiyuzhang001-a11y/InstPlot)。
+> [InstPlot Lite](https://github.com/zhiyuzhang001-a11y/InstPlot-Lite)。
 
 ## Objective
 

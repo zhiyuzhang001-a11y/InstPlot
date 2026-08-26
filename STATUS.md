@@ -1,8 +1,8 @@
-# InstPlot Python Legacy 状态
+# InstPlot Python 源码版状态
 
 - 更新日期：`2026-08-26`
 - 状态：`MAINTENANCE_ARCHIVE`
-- 当前用户产品：[InstPlot Lite](https://github.com/zhiyuzhang001-a11y/InstPlot)
+- 当前用户产品：[InstPlot Lite](https://github.com/zhiyuzhang001-a11y/InstPlot-Lite)
 - 发布策略：不再构建或发布 Python 版安装包
 
 ## 保留内容
