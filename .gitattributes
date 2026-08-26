@@ -1,0 +1,3 @@
+# Preserve instrument fixtures byte-for-byte. Trailing delimiters and CRLF line
+# endings are part of the parser regression coverage.
+tests/fixtures/real_samples/** -text -whitespace
