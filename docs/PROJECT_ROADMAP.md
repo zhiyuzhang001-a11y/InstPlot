@@ -2,7 +2,7 @@
 
 > [!NOTE]
 > 这是 Python 版在 M3–M7 阶段的历史路线图，不是当前待办列表。现行用户产品和下载请查看
-> [InstPlot Lite](https://github.com/zhiyuzhang001-a11y/InstPlot)。
+> [InstPlot Lite](https://github.com/zhiyuzhang001-a11y/InstPlot-Lite)。
 
 - 更新日期：`2026-08-24`
 - 总体状态：`M3-M7.5_AUTOMATION_COMPLETE / PUBLIC_RELEASE_PENDING_AUTHORIZATION / REAL_SAMPLES_PENDING`

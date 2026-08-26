@@ -25,7 +25,7 @@
     `880,313,514 bytes` (`57.97%`).
   - Windows x64: Essentials `569,322,737 bytes` (`542.95 MiB`), full `1,021,148,587 bytes` (`973.84 MiB`), saving
     `451,825,850 bytes` (`44.25%`).
-- CI evidence: `https://github.com/zhiyuzhang001-a11y/InstPlot/actions/runs/32648822899`.
+- CI evidence: `https://github.com/zhiyuzhang001-a11y/InstPlot-Lite/actions/runs/32648822899`.
 - No real instrument file was available. Automated fixtures remain accepted, while real TXT/DAT/VSM/XLS/XLSX
   validation remains pending rather than being inferred from CI.
 
@@ -44,7 +44,7 @@
   no issue carrying an external sample. Real instrument validation therefore remains the only M7 user-supplied gate.
 - Final GitHub Actions run `32678530521` passed the updated release gate and full native matrix: Ubuntu/macOS
   `260 passed`, Windows `259 passed, 1 skipped`. Evidence:
-  `https://github.com/zhiyuzhang001-a11y/InstPlot/actions/runs/32678530521`.
+  `https://github.com/zhiyuzhang001-a11y/InstPlot-Lite/actions/runs/32678530521`.
 
 ## 2026-08-24 — zero-Python prerequisite and compatibility extension — COMPLETE
 
