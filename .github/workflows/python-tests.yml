@@ -10,13 +10,14 @@ permissions:
 
 jobs:
   quality:
-    name: Source quality (${{ matrix.os }})
+    name: Source quality (${{ matrix.os }}, Python ${{ matrix.python-version }})
     runs-on: ${{ matrix.os }}
     timeout-minutes: 25
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
     env:
       PYTHONUTF8: "1"
       PYTHONWARNINGS: error
@@ -26,10 +27,10 @@ jobs:
       - name: Check out source
         uses: actions/checkout@v6
 
-      - name: Set up CPython 3.12
+      - name: Set up CPython ${{ matrix.python-version }}
         uses: actions/setup-python@v6
         with:
-          python-version: "3.12"
+          python-version: ${{ matrix.python-version }}
           cache: pip
           cache-dependency-path: requirements.lock
 
