@@ -1,4 +1,4 @@
-# InstPlot - 实验数据可视化工具
+# InstPlot (Python source edition)
 
 <div align="center">
 
@@ -17,6 +17,30 @@
 > 这是 InstPlot 的原 Python 源码版，用于保留完整功能、算法和项目历史。
 > 本仓库不再提供安装包，运行源码需要 Python 环境。希望直接下载安装、无需
 > Python 的普通用户，请使用 [InstPlot Lite](https://github.com/zhiyuzhang001-a11y/InstPlot-Lite)。
+
+## Start here
+
+InstPlot is a Python desktop tool for inspecting, processing, fitting, and exporting experimental data. This maintenance archive preserves the original implementation, regression fixtures, and development history. For a packaged application, see [InstPlot Lite](https://github.com/zhiyuzhang001-a11y/InstPlot-Lite).
+
+- **Inspect data.** Import delimited text or spreadsheets, select X and Y columns, and compare curves.
+- **Process and fit.** Center or normalize curves, subtract a background over a selected interval, remove points with undo, and fit supported models.
+- **Export.** Save figures or processed data for downstream analysis.
+
+### Source quick start
+
+From a checkout, use a fresh virtual environment with CPython 3.10–3.14. Install the [locked dependencies](requirements.lock) and the source package, then start the desktop application.
+
+```bash
+python -m pip install --require-hashes -r requirements.lock
+python -m pip install --no-deps .
+python -m InstPlot
+```
+
+For environment setup and Linux EGL requirements, see the Chinese installation guide below. For a read-only introduction, compare the archived [before](ReadMe图片/bf_归一化.png) and [after](ReadMe图片/af_归一化.png) normalization figures. The images retain their original axis labels and illustrate the historical workflow.
+
+The [Python test workflow](.github/workflows/python-tests.yml) defines the source verification matrix. See [maintenance status](STATUS.md) for scope and [instrument-format fixtures](tests/fixtures/real_samples/) for import regression inputs.
+
+## 中文使用指南
 
 ## 📖 简介
 
